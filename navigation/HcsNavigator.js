@@ -1,0 +1,103 @@
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator, CardStyleInterpolators  } from '@react-navigation/stack';
+import { Home, Test } from '../screens/Home';
+import { HomeUser } from '../screens/User/';
+import { HomeNofication } from '../screens/Nofication/';
+import { HomeSocial } from '../screens/Social/';
+import { Ionicons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
+const HomeScreen = () => {
+  const HomeStack = createStackNavigator();
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animationEnabled: true,
+        gestureDirection: 'horizontal',
+        gestureEnabled: true,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+      }}
+    >
+      <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="Test" component={Test} />
+    </HomeStack.Navigator>
+  );
+};
+const NoficationScreen = () => {
+  const nofiStack = createStackNavigator();
+  return (
+    <nofiStack.Navigator screenOptions={{ headerShown: false }}>
+      <nofiStack.Screen name="Home" component={HomeNofication} />
+    </nofiStack.Navigator>
+  );
+};
+const SocailScreen = () => {
+  const SocialStack = createStackNavigator();
+  return (
+    <SocialStack.Navigator screenOptions={{ headerShown: false }}>
+      <SocialStack.Screen name="Home" component={HomeSocial} />
+    </SocialStack.Navigator>
+  );
+};
+const InfoScreen = () => {
+  const InfoStack = createStackNavigator();
+  return (
+    <InfoStack.Navigator screenOptions={{ headerShown: false }}>
+      <InfoStack.Screen name="Home" component={HomeUser} />
+    </InfoStack.Navigator>
+  );
+};
+
+const HcsNavigator = () => {
+  const BottomNavigator = createBottomTabNavigator();
+  return (
+    <BottomNavigator.Navigator
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: '#3CB371' }}
+    >
+      <BottomNavigator.Screen
+        name="Trang chủ"
+        options={{
+          tabBarIcon: (props) => (
+            <Ionicons name="home" size={24} color={props.color} />
+          ),
+        }}
+        component={HomeScreen}
+      />
+      <BottomNavigator.Screen
+        name="Cộng đồng"
+        options={{
+          tabBarIcon: (props) => (
+            <AntDesign name="wechat" size={24} color={props.color} />
+          ),
+        }}
+        component={SocailScreen}
+      />
+      <BottomNavigator.Screen
+        name="Thông báo"
+        options={{
+          tabBarIcon: (props) => (
+            <Ionicons
+              name="notifications-sharp"
+              size={24}
+              color={props.color}
+            />
+          ),
+        }}
+        component={NoficationScreen}
+      />
+      <BottomNavigator.Screen
+        name="Cá nhân"
+        options={{
+          tabBarIcon: (props) => (
+            <FontAwesome name="user" size={24} color={props.color} />
+          ),
+        }}
+        component={InfoScreen}
+      />
+    </BottomNavigator.Navigator>
+  );
+};
+
+export default HcsNavigator;
