@@ -1,6 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator, CardStyleInterpolators  } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
+import Authentication from './Authentication';
 import { Home, Test } from '../screens/Home';
 import { HomeUser } from '../screens/User/';
 import { HomeNofication } from '../screens/Nofication/';
@@ -17,11 +21,11 @@ const HomeScreen = () => {
         animationEnabled: true,
         gestureDirection: 'horizontal',
         gestureEnabled: true,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
       <HomeStack.Screen name="Home" component={Home} />
-      <HomeStack.Screen name="Test" component={Test} />
+      <HomeStack.Screen name="Authentication" component={Authentication} />
     </HomeStack.Navigator>
   );
 };
@@ -29,7 +33,7 @@ const NoficationScreen = () => {
   const nofiStack = createStackNavigator();
   return (
     <nofiStack.Navigator screenOptions={{ headerShown: false }}>
-      <nofiStack.Screen name="Home" component={HomeNofication} />
+      <nofiStack.Screen name="Notification" component={HomeNofication} />
     </nofiStack.Navigator>
   );
 };
@@ -37,7 +41,7 @@ const SocailScreen = () => {
   const SocialStack = createStackNavigator();
   return (
     <SocialStack.Navigator screenOptions={{ headerShown: false }}>
-      <SocialStack.Screen name="Home" component={HomeSocial} />
+      <SocialStack.Screen name="Socail" component={HomeSocial} />
     </SocialStack.Navigator>
   );
 };
@@ -45,7 +49,7 @@ const InfoScreen = () => {
   const InfoStack = createStackNavigator();
   return (
     <InfoStack.Navigator screenOptions={{ headerShown: false }}>
-      <InfoStack.Screen name="Home" component={HomeUser} />
+      <InfoStack.Screen name="Info" component={HomeUser} />
     </InfoStack.Navigator>
   );
 };
@@ -96,6 +100,16 @@ const HcsNavigator = () => {
         }}
         component={InfoScreen}
       />
+       {/* <BottomNavigator.Screen
+        name="Authentication"
+        options={{
+         animationEnabled: true,
+         tabBarStyle: { display: 'none'},
+         tabBarButton: () => null,
+         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+        }}
+        component={Authentication}
+      /> */}
     </BottomNavigator.Navigator>
   );
 };
