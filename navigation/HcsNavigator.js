@@ -4,14 +4,16 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from "@react-navigation/stack";
-import Authentication from "./Authentication";
-import { Home, Test } from "../screens/Home";
-import { HomeUser } from "../screens/User/";
-import { HomeNofication } from "../screens/Nofication/";
-import { HomeSocial } from "../screens/Social/";
-import { Ionicons } from "@expo/vector-icons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Authentication from './Authentication';
+import { Home, Test } from '../screens/Home';
+import { HomeUser } from '../screens/User/';
+import { HomeNofication } from '../screens/Nofication/';
+import { HomeSocial } from '../screens/Social/';
+import { Ionicons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
+import DoctorSchedule from '../screens/Schedule/ScheduleDoctor'
 import HealthProfile from "../screens/User/HealthProfile";
 import EditProfile from "../screens/User/EditProfile";
 const HomeScreen = () => {
@@ -27,6 +29,8 @@ const HomeScreen = () => {
       }}
     >
       <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="medicalSchedule" component={MedicalSchedule} />
+      <HomeStack.Screen name="doctorSchedule" component={DoctorSchedule} />
       <HomeStack.Screen name="Authentication" component={Authentication} />
     </HomeStack.Navigator>
   );
