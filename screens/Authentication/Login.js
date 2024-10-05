@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, Button } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Input from '../../Components/Input';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import Button from '../../Components/Button';
+import apiClient from '../../api/apiClient';
 const Login = ({ navigation }) => {
   const [text, setText] = useState({ accountText: '', password: '' });
+  const [loading, setLoading] = useState(false) 
+   
+  const submitForm = async () => {
+    setLoading(true);
+     try {
+      const response = await apiClient.post('/auth/login', {
+        username: text.accountText,  // Gửi tài khoản
+        password: text.password,        // Gửi mật khẩu
+      });
+      console.log(response.data)
+     } catch (error) {
+      console.log(error.response.data);
+     } finally {
+      setLoading(false);
+     }
+
+  }
+
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="px-4">
@@ -28,6 +47,7 @@ const Login = ({ navigation }) => {
           iconSize={28}
         />
       </View>
+      <Button text="Đăng Nhập" disabled={false} loading={loading}  onPressFunction={submitForm}/>
       <View className="flex-row items-center my-4">
         <View className="flex-1 h-px bg-gray-300" />
         <View className="flex-1 h-px bg-gray-300" />

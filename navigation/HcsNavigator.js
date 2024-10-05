@@ -12,6 +12,8 @@ import { HomeSocial } from '../screens/Social/';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
+import DoctorSchedule from '../screens/Schedule/ScheduleDoctor'
 const HomeScreen = () => {
   const HomeStack = createStackNavigator();
   return (
@@ -25,6 +27,8 @@ const HomeScreen = () => {
       }}
     >
       <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="medicalSchedule" component={MedicalSchedule} />
+      <HomeStack.Screen name="doctorSchedule" component={DoctorSchedule} />
       <HomeStack.Screen name="Authentication" component={Authentication} />
     </HomeStack.Navigator>
   );
