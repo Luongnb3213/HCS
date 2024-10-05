@@ -1,9 +1,9 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   createStackNavigator,
   CardStyleInterpolators,
-} from '@react-navigation/stack';
+} from "@react-navigation/stack";
 import Authentication from './Authentication';
 import { Home, Test } from '../screens/Home';
 import { HomeUser } from '../screens/User/';
@@ -14,6 +14,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
 import DoctorSchedule from '../screens/Schedule/ScheduleDoctor'
+import HealthProfile from "../screens/User/HealthProfile";
+import EditProfile from "../screens/User/EditProfile";
 const HomeScreen = () => {
   const HomeStack = createStackNavigator();
   return (
@@ -21,7 +23,7 @@ const HomeScreen = () => {
       screenOptions={{
         headerShown: false,
         animationEnabled: true,
-        gestureDirection: 'horizontal',
+        gestureDirection: "horizontal",
         gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
@@ -49,11 +51,32 @@ const SocailScreen = () => {
     </SocialStack.Navigator>
   );
 };
+
 const InfoScreen = () => {
   const InfoStack = createStackNavigator();
   return (
-    <InfoStack.Navigator screenOptions={{ headerShown: false }}>
-      <InfoStack.Screen name="Info" component={HomeUser} />
+    <InfoStack.Navigator>
+      {/* Màn hình User không có header */}
+      <InfoStack.Screen
+        name="Info"
+        component={HomeUser}
+        options={{ headerShown: false }}
+      />
+
+      <InfoStack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{ headerShown: false }}
+      />
+
+      {/* Màn hình HealthProfile sẽ không có header mặc định */}
+      <InfoStack.Screen
+        name="HealthProfile"
+        component={HealthProfile}
+        options={{
+          headerShown: false, // Ẩn header mặc định
+        }}
+      />
     </InfoStack.Navigator>
   );
 };
@@ -62,7 +85,7 @@ const HcsNavigator = () => {
   const BottomNavigator = createBottomTabNavigator();
   return (
     <BottomNavigator.Navigator
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: '#3CB371' }}
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: "#3CB371" }}
     >
       <BottomNavigator.Screen
         name="Trang chủ"
@@ -104,7 +127,7 @@ const HcsNavigator = () => {
         }}
         component={InfoScreen}
       />
-       {/* <BottomNavigator.Screen
+      {/* <BottomNavigator.Screen
         name="Authentication"
         options={{
          animationEnabled: true,
