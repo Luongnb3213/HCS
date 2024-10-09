@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -13,9 +13,17 @@ import {
 } from 'react-native';
 import Fontisto from '@expo/vector-icons/Fontisto';
 
-const FilterItems = ({ item, pageitem }) => {
+const FilterItems = ({
+  filtersElement,
+  pageitem,
+  filter,
+  dispatch,
+  setShowSpecialty = () => {},
+}) => {
   const [search, setSearch] = React.useState('');
-  const [filterArray, setfilterArray] = React.useState(item.fitlerArray);
+  const [filterArray, setfilterArray] = React.useState(
+    filtersElement.fitlerArray
+  );
   function removeAccents(str) {
     const accents = 'áàạảãâắằặẳẵêéèẹẻẽíìịỉĩóòọỏõôốồộổỗúùụủũýỳỵỷỹ';
     const withoutAccents = 'aaaaaaaaaeeaaaaaaiiiiiioooooouuuuuyyyy';
@@ -25,22 +33,48 @@ const FilterItems = ({ item, pageitem }) => {
         : c;
     });
   }
-  useEffect(() => {
-    const filteredArray = item.fitlerArray.filter((filterItem) => {
-      const normalizedFilterItem = removeAccents(filterItem.toLowerCase());
-      const normalizedSearch = removeAccents(search.toLowerCase());
-      return normalizedFilterItem.includes(normalizedSearch);
+
+  if (pageitem) {
+    useEffect(() => {
+      const filteredArray = filtersElement.fitlerArray.filter((filterItem) => {
+        const normalizedFilterItem = removeAccents(
+          filterItem.title.toLowerCase()
+        );
+        const normalizedSearch = removeAccents(search.toLowerCase());
+        return normalizedFilterItem.includes(normalizedSearch);
+      });
+
+      setfilterArray(filteredArray);
+    }, [search]);
+  }
+
+  const limit = pageitem ? filtersElement.fitlerArray.length : 5;
+
+  const actionAddFilter = (value) => {
+    dispatch({
+      type: filtersElement.action + '_DO_TODO',
+      filterValue: value,
     });
+  };
+  const actionRemoveFilter = (value) => {
+    dispatch({
+      type: 'UNDO_TODO',
+      filterValue: '',
+      typeFilter: value,
+    });
+  };
+  const handleBlur = (value,type) => {
+    dispatch({
+      type: 'PRICE_INPUT',
+      filterValue: value,
+      typeFilter: type
+    });
+  };
 
-
-    setfilterArray(filteredArray);
-  }, [search]);
-
-  const limit = pageitem ? item.fitlerArray.length : 5;
   return (
     <View className="mb-2">
       {!pageitem ? (
-        <Text className="text-xs mb-3 font-medium">{item.title}</Text>
+        <Text className="text-xs mb-3 font-medium">{filtersElement.title}</Text>
       ) : (
         <View className="flex  border border-gray-100 flex-row items-center rounded-md m-[2%] px-3 py-1">
           <Fontisto name="search" size={15} color="black" />
@@ -48,16 +82,19 @@ const FilterItems = ({ item, pageitem }) => {
             onChangeText={setSearch}
             value={search}
             className="ml-3"
-            placeholder={item.title}
+            placeholder={filtersElement.title}
           />
         </View>
       )}
 
-      {item.type != 'other' && (
+      {filtersElement.type == 'price' && (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-row">
             <TextInput
               style={styles.gridItem}
+              onEndEditing={({ nativeEvent: { text } }) => {
+                handleBlur(text, "low")
+              }}
               className="px-2 w-[48%] py-2 text-center"
               placeholder="Từ"
               keyboardType="numeric"
@@ -66,6 +103,9 @@ const FilterItems = ({ item, pageitem }) => {
               style={styles.gridItem}
               className="px-2 w-[48%] py-2 text-center"
               placeholder="Đến"
+              onEndEditing={({ nativeEvent: { text } }) => {
+                handleBlur(text, "high")
+              }}
               keyboardType="numeric"
             />
           </View>
@@ -79,9 +119,29 @@ const FilterItems = ({ item, pageitem }) => {
           return (
             <>
               {index <= limit && (
-                <View className="mb-2 px-2 py-3" style={styles.gridItem}>
-                  <TouchableOpacity>
-                    <Text className="text-center">{item}</Text>
+                <View
+                  className={`mb-2 px-2 py-3 ${
+                    filter[filtersElement.type] == item.value && 'bg-green-500'
+                  }`}
+                  style={styles.gridItem}
+                >
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (filter[filtersElement.type] != item.value) {
+                        actionAddFilter(item.value);
+                      } else {
+                        actionRemoveFilter(filtersElement.type);            
+                      }
+                    }}
+                  >
+                    <Text
+                      className={`text-center ${
+                        filter[filtersElement.type] == item.value &&
+                        'text-white'
+                      }`}
+                    >
+                      {item.title}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -90,7 +150,12 @@ const FilterItems = ({ item, pageitem }) => {
         }}
       />
       {filterArray.length > 5 && !pageitem && (
-        <TouchableOpacity className="mt-2">
+        <TouchableOpacity
+          onPress={() => {
+            setShowSpecialty(true);
+          }}
+          className="mt-2"
+        >
           <Text className="text-center">Xem thêm </Text>
         </TouchableOpacity>
       )}

@@ -1,9 +1,9 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
   CardStyleInterpolators,
-} from "@react-navigation/stack";
+} from '@react-navigation/stack';
 import Authentication from './Authentication';
 import { Home, Test } from '../screens/Home';
 import { HomeUser } from '../screens/User/';
@@ -13,9 +13,11 @@ import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
-import DoctorSchedule from '../screens/Schedule/ScheduleDoctor'
-import HealthProfile from "../screens/User/HealthProfile";
-import EditProfile from "../screens/User/EditProfile";
+import DoctorSchedule from '../screens/Schedule/ScheduleDoctor';
+import HealthProfile from '../screens/User/HealthProfile';
+import EditProfile from '../screens/User/EditProfile';
+import DoctorAppointment from '../screens/Schedule/DoctorAppointment'
+import BookingScreen from '../screens/Schedule/BookingScreen';
 const HomeScreen = () => {
   const HomeStack = createStackNavigator();
   return (
@@ -23,14 +25,23 @@ const HomeScreen = () => {
       screenOptions={{
         headerShown: false,
         animationEnabled: true,
-        gestureDirection: "horizontal",
-        gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        
       }}
     >
-      <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen
+        options={{      
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+
+        }}
+        name="Home"
+        component={Home}
+      />
+      <HomeStack.Screen name="bookingscreen" component={BookingScreen} />
       <HomeStack.Screen name="medicalSchedule" component={MedicalSchedule} />
       <HomeStack.Screen name="doctorSchedule" component={DoctorSchedule} />
+      <HomeStack.Screen name="doctorappointment" component={DoctorAppointment} />
       <HomeStack.Screen name="Authentication" component={Authentication} />
     </HomeStack.Navigator>
   );
@@ -85,7 +96,7 @@ const HcsNavigator = () => {
   const BottomNavigator = createBottomTabNavigator();
   return (
     <BottomNavigator.Navigator
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: "#3CB371" }}
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: '#3CB371' }}
     >
       <BottomNavigator.Screen
         name="Trang chủ"
