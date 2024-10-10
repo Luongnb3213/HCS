@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import apiClient from '../../api/apiClient';
 
 const HomeUser = ({ navigation }) => {
+    const [user, setUser] = useState(null);
+
+    // Giả sử bạn lấy userId từ AsyncStorage hoặc prop
+    const userId = 1;
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await apiClient.get(`/users/${userId}`);
+                setUser(response.data);
+            } catch (error) {
+                console.log('Error fetching user data:', error);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.profileContainer}>
-                <Image 
-                    source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHLplp-juVo7t_CaOZrdLBVjc19DbXXFkiCQ&sle-image-url' }} 
-                    style={styles.profileImage} 
-                />
-                <Text style={styles.profileName}>NGUYEN BAO LONG</Text>
-                <Text style={styles.points}>0 điểm IVIE</Text>
-                <TouchableOpacity style={styles.updateButton} onPress={() => navigation.navigate('EditProfile')}>
+                {user && (
+                    <>
+                        <Image 
+                            source={{ uri: user.profilePicture }} 
+                            style={styles.profileImage} 
+                        />
+                        <Text style={styles.profileName}>{user.fullName}</Text>
+                        <Text style={styles.points}>0 điểm</Text>
+                    </>
+                )}
+                <TouchableOpacity 
+                    style={styles.updateButton} 
+                    onPress={() => navigation.navigate('EditProfile')}
+                >
                     <Text style={styles.updateButtonText}>Cập nhật</Text>
                 </TouchableOpacity>
             </View>

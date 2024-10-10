@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,28 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import apiClient from "../../api/apiClient";
+
 const HealthProfile = () => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
+
+  // Giả sử bạn lấy userId từ AsyncStorage hoặc prop
+  const userId = 1;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await apiClient.get(`/users/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       {/* Custom Header */}
@@ -37,16 +57,20 @@ const HealthProfile = () => {
 
       {/* Profile Section */}
       <View style={styles.profileSection}>
-        <Image
-          source={{ uri: "https://your-profile-image-url" }}
-          style={styles.profileImage}
-        />
-        <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>29 Nguyen Bao Long</Text>
-          <Text style={styles.profileDetails}>
-            0 Lần khám | 0 Thành viên | BMI --
-          </Text>
-        </View>
+        {user && (
+          <>
+            <Image
+              source={{ uri: user.profilePicture }} 
+              style={styles.profileImage}
+            />
+            <View style={styles.profileInfo}>
+              <Text style={styles.profileName}>{user.fullName}</Text>
+              <Text style={styles.profileDetails}>
+                0 Lần khám | 0 Thành viên | BMI --
+              </Text>
+            </View>
+          </>
+        )}
       </View>
 
       {/* Action Buttons */}

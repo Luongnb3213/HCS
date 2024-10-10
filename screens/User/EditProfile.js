@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,10 +11,26 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 // import { Picker } from '@react-native-picker/picker';
-
+import apiClient from "../../api/apiClient";
 
 const EditProfile = () => {
-  const [name, setName] = useState("29 NGUYEN BAO LONG");
+  const [user, setUser] = useState(null);
+  const userId = 1;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await apiClient.get(`/users/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+  const [profilePicture, setProfilePicture] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("Nam");
   const [dob, setDob] = useState("");
@@ -23,6 +39,41 @@ const EditProfile = () => {
   const [ethnicity, setEthnicity] = useState("");
   const [nationality, setNationality] = useState("");
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (user) {
+      setProfilePicture(user.profilePicture || "http//#.com");
+      setName(user.fullName || ""); // Set default to empty string if user.fullName is undefined
+      setPhone(user.phone || "");
+      setGender(user.gender || "MALE"); // Assuming "Nam" is the default
+      setDob(user.dateOfBirth || "");
+      setIdNumber(user.idNumber || "");
+      setAddress(user.address || "");
+      setEthnicity(user.ethnicity || "");
+      setNationality(user.nationality || "");
+    }
+  }, [user]);
+
+  const handleUpdateUser = async () => {
+    try {
+      const updatedUser = {
+        fullName: name,
+        phone: phone,
+        gender: gender,
+        dateOfBirth: dob,
+      };
+
+      const response = await apiClient.put(`/users/${userId}`, updatedUser);
+      console.log("data:", response.data.message);
+      // Alert.alert("Cập nhật thành công!", response.data.message);
+      navigation.goBack(); // Quay lại màn hình trước
+    } catch (error) {
+      console.log("Error updating user data:", error);
+      // Alert.alert("Cập nhật thất bại", "Có lỗi xảy ra khi cập nhật thông tin.");
+    }
+  };
+
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -41,7 +92,7 @@ const EditProfile = () => {
       {/* Profile Image */}
       <View style={styles.profileSection}>
         <Image
-          source={{ uri: "https://your-profile-image-url" }}
+          source={{ uri: profilePicture }}
           style={styles.profileImage}
         />
         <TouchableOpacity style={styles.cameraIcon}>
@@ -72,8 +123,8 @@ const EditProfile = () => {
           <Text style={styles.phoneCode}>+84</Text>
           <TextInput
             style={styles.phoneTextInput}
-            value={phone}
-            onChangeText={setPhone}
+            value={formatPhoneNumber(phone)}
+            onChangeText={(text) => setPhone(formatPhoneNumber(text))}
             keyboardType="phone-pad"
             placeholder="Số điện thoại"
           />
@@ -85,6 +136,7 @@ const EditProfile = () => {
           style={styles.input}
           value={dob}
           onChangeText={setDob}
+          keyboardType="phone-pad"
           placeholder="Chọn ngày sinh"
         />
 
@@ -95,18 +147,18 @@ const EditProfile = () => {
             <TouchableOpacity
               style={[
                 styles.genderButton,
-                gender === "Nam" ? styles.selected : {},
+                gender === "MALE" ? styles.selected : {},
               ]}
-              onPress={() => setGender("Nam")}
+              onPress={() => setGender("MALE")}
             >
               <Text style={styles.genderText}>Nam</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.genderButton,
-                gender === "Nữ" ? styles.selected : {},
+                gender === "FEMALE" ? styles.selected : {},
               ]}
-              onPress={() => setGender("Nữ")}
+              onPress={() => setGender("FEMALE")}
             >
               <Text style={styles.genderText}>Nữ</Text>
             </TouchableOpacity>
@@ -166,11 +218,29 @@ const EditProfile = () => {
       </View>
 
       {/* Complete Button */}
-      <TouchableOpacity style={styles.completeButton}>
+      <TouchableOpacity style={styles.completeButton} onPress={handleUpdateUser}>
         <Text style={styles.completeButtonText}>Hoàn thành</Text>
       </TouchableOpacity>
     </ScrollView>
   );
+};
+
+const formatPhoneNumber = (phoneNumber) => {
+  // Loại bỏ tất cả các ký tự không phải số
+  const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+
+  // Nếu có 10 số và bắt đầu bằng số 0, cắt số 0 và chuyển sang +84
+  if (cleaned.length === 10 && cleaned.startsWith('0')) {
+    const withoutZero = cleaned.substring(1); // Cắt số 0 đầu
+    return withoutZero.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+  }
+
+  // Nếu có 9 số, format theo chuẩn XXX XXX XXX
+  if (cleaned.length === 9) {
+    return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+  }
+
+  return cleaned; // Trả về nguyên bản nếu không đủ 9 hoặc 10 số
 };
 
 const styles = StyleSheet.create({
@@ -179,22 +249,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row', // Đặt các phần tử theo hàng ngang
-    alignItems: 'center', // Can giữa theo trục dọc
-    justifyContent: 'center', // Can giữa nội dung theo trục ngang
-    backgroundColor: '#1abc9c',
+    flexDirection: "row", // Đặt các phần tử theo hàng ngang
+    alignItems: "center", // Can giữa theo trục dọc
+    justifyContent: "center", // Can giữa nội dung theo trục ngang
+    backgroundColor: "#1abc9c",
     paddingHorizontal: 10,
     paddingVertical: 15,
-    position: 'relative',
+    position: "relative",
   },
   backButton: {
-    position: 'absolute', // Đặt nút back ở bên trái
+    position: "absolute", // Đặt nút back ở bên trái
     left: 15,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
   },
   profileSection: {
     alignItems: "center",
