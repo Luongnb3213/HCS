@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   StyleSheet,
@@ -9,12 +9,12 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
-import ImageUploader from '../../Components/ImageUploader';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+import ImageUploader from "../../Components/ImageUploader";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -25,7 +25,7 @@ Notifications.setNotificationHandler({
 });
 
 const Home = ({ navigation }) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   // const [expoPushToken, setExpoPushToken] = useState('');
   // const [channels, setChannels] = useState([]);
   // const [notification, setNotification] = useState(undefined);
@@ -70,7 +70,7 @@ const Home = ({ navigation }) => {
         {/* Header với ô tìm kiếm */}
         <View className="bg-green-500 p-4">
           <Text className="text-white text-center text-lg font-bold">
-            IVIE - BÁC SĨ ƠI
+            HCS - Health Care
           </Text>
           <Text className="text-white text-center text-sm">
             Ứng dụng chăm sóc sức khỏe 24/7
@@ -86,7 +86,7 @@ const Home = ({ navigation }) => {
         {/* Banner */}
         <View className="bg-white p-4 mt-4 rounded-lg shadow mx-4">
           <Image
-            source={{ uri: 'https://link_to_banner_image.com/banner.png' }} // Thay bằng link ảnh banner thật
+            source={{ uri: "https://www.shutterstock.com/image-photo/hands-doctor-clipboard-writing-notes-600nw-2507090935.jpg" }} // Thay bằng link ảnh banner thật
             className="w-full h-40 rounded-lg"
             resizeMode="cover"
           />
@@ -98,25 +98,27 @@ const Home = ({ navigation }) => {
             Tính năng nổi bật
           </Text>
           <View className="flex-row justify-between flex-wrap">
-            <TouchableOpacity className="w-1/4 p-2 items-center">
+            <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: 'https://link_to_icon_image.com/icon1.png' }} // Thay bằng link icon thật
+                source={{
+                  uri: "https://cdn-icons-png.flaticon.com/512/4320/4320337.png",
+                }} // Thay bằng link icon thật
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">Mua sắm</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/4 p-2 items-center">
+            <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: 'https://link_to_icon_image.com/icon2.png' }}
+                source={{ uri: "https://cdn-icons-png.flaticon.com/512/2991/2991158.png" }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">Gọi bác sĩ</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/4 p-2 items-center">
+            <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: 'https://link_to_icon_image.com/icon3.png' }}
+                source={{ uri: "https://cdn-icons-png.flaticon.com/512/2804/2804650.png" }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
@@ -124,17 +126,17 @@ const Home = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/4 p-2 items-center">
+            <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: 'https://link_to_icon_image.com/icon4.png' }}
+                source={{ uri: "https://cdn-icons-png.flaticon.com/512/7284/7284037.png" }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">Hỏi đáp y tế</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/4 p-2 items-center">
+            <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: 'https://link_to_icon_image.com/icon5.png' }}
+                source={{ uri: "https://cdn-icons-png.flaticon.com/512/7757/7757793.png" }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
@@ -142,9 +144,9 @@ const Home = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/4 p-2 items-center">
+            <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: 'https://link_to_icon_image.com/icon6.png' }}
+                source={{ uri: "https://cdn-icons-png.flaticon.com/512/843/843169.png" }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
@@ -161,7 +163,7 @@ const Home = ({ navigation }) => {
           </Text>
           <View className="flex-row justify-between items-center">
             <Text className="text-gray-700 text-sm">
-              Bác sĩ Trần Thị Thanh Nho
+              Bác sĩ Trần Thị Thanh Nhã
             </Text>
             <TouchableOpacity className="bg-green-500 px-4 py-2 rounded-lg">
               <Text className="text-white font-bold">Xem thêm</Text>
@@ -169,7 +171,6 @@ const Home = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-
     </SafeAreaView>
   );
 };
@@ -236,7 +237,7 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
