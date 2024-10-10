@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import apiClient from '../api/apiClient'; // Đảm bảo bạn nhập đúng đường dẫn tới file chứa apiClient
 
 export default function useFetch(url, config = {}) {
   const [data, setData] = useState(null);
@@ -9,14 +9,17 @@ export default function useFetch(url, config = {}) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Sử dụng axios với config truyền vào, mặc định là GET nếu không có config method
-        const response = await axios({ url, ...config });
+        const response = await apiClient({ url, ...config });
         setData(response.data);
       } catch (err) {
-        if (axios.isAxiosError(err)) {
-          setError(`Axios error: ${err.message}`);
+        if (err.response) {
+          setError(`Server error: ${err.response.status} - ${err.response.statusText}`);
+        } else if (err.request) {
+
+          setError('No response received from server');
         } else {
-          setError(`General error: ${err.message}`);
+
+          setError(`Error: ${err.message}`);
         }
       } finally {
         setLoading(false);
@@ -25,11 +28,8 @@ export default function useFetch(url, config = {}) {
 
     fetchData();
 
-    // Cleanup function (nếu cần)
-    return () => {
-      // Xử lý cleanup nếu cần thiết
-    };
-  }, [url, config]);
+    return () => {};
+  }, []);
 
   return { data, loading, error };
 }

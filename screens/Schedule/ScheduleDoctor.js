@@ -1,4 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -8,22 +14,40 @@ import {
   Animated,
   Pressable,
   StyleSheet,
-  ScrollView,
   FlatList,
-  KeyboardAvoidingView,
-  Platform,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import FilterItems from './FilterItems';
+import DoctorDetail from '../../Components/DoctorDetail';
+import Calendar from '../../Components/Calendar';
+import FilterDoctor from './FilterDoctor';
+import CustomFlatlist from '../../Components/CustomFlatlist';
+import apiClient from '../../api/apiClient';
+
+const initialFilters = {
+  price: '',
+  specialty: '',
+  numberPfMedicalAppointments: 'asd',
+  reviews: '',
+};
 
 const DoctorSchedule = ({ navigation }) => {
+  const [filters, setFilters] = useState(initialFilters);
   const [search, setSearch] = React.useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [showSpecialty, setShowSpecialty] = useState(false);
   const slideAnim = useRef(new Animated.Value(300)).current;
-
+  const [date, setDate] = useState(() => {
+    const currentDate = new Date();
+    return currentDate.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+    });
+  });
   const openModal = () => {
     setModalVisible(true);
     Animated.timing(slideAnim, {
@@ -43,38 +67,21 @@ const DoctorSchedule = ({ navigation }) => {
     });
   };
 
-  const Filters = [
-    {
-      title: 'Khoảng giá',
-      fitlerArray: ['0 - 500K', '500k - 1000k', '1000k - 1,500k'],
-      type: 'price',
+  const callApi = useCallback(
+    async (data) => {
+      try {
+        const response = await apiClient.post(`doctors/filter`, {
+          ...filters,
+          date: date,
+        });
+        const result = await response.data;
+        return result;
+      } catch (error) {
+        console.log(error);
+      }
     },
-    {
-      title: 'Chuyên khoa',
-      fitlerArray: [
-        'Giác mạc',
-        'Dịch kính võng mạc',
-        'Chấn thương mắt',
-        'Giác mạc',
-        'Dịch kính võng mạc',
-        'Chấn thương mắt',
-        'Giác mạc',
-        'Dịch kính võng mạc',
-        'Chấn thương mắt',
-      ],
-      type: 'other',
-    },
-    {
-      title: 'Số lượt Đặt khám ',
-      fitlerArray: ['Tăng dần', 'Giảm dần'],
-      type: 'other',
-    },
-    {
-      title: 'Đánh giá',
-      fitlerArray: ['5 sao', 'Từ 4 sao', 'Từ 3 sao', 'Từ 2 sao', 'Từ 1 sao'],
-      type: 'other',
-    },
-  ];
+    [filters, date]
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -110,6 +117,16 @@ const DoctorSchedule = ({ navigation }) => {
               >
                 <View></View>
                 <View className=" flex flex-row mb-4">
+                  {showSpecialty && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setShowSpecialty(false);
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={20} color="black" />
+                    </TouchableOpacity>
+                  )}
+
                   <Text className="flex-1 text-center border-b border-gray-100 pb-4">
                     Lọc
                   </Text>
@@ -117,55 +134,32 @@ const DoctorSchedule = ({ navigation }) => {
                     <AntDesign name="close" size={20} color="black" />
                   </Pressable>
                 </View>
-                <View >
-                  <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    keyboardVerticalOffset={100}
-                  >
-                    <FlatList
-                      data={Filters}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderItem={({ item }) => <FilterItems pageitem={false} item={item} />}
-                      style={styles.listContainer}
-                    />
-                  </KeyboardAvoidingView>
-                  <View className="flex-row items-center justify-between gap-2">
-                    <TouchableOpacity
-                      style={StyleSheet.buttonBottom}
-                      className="px-2 w-[48%] py-3 border border-green-500 "
-                    >
-                      <Text className="text-center text-green-400">
-                        Thiết lập lại
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={StyleSheet.buttonBottom}
-                      className="px-2 w-[48%] py-3 bg-green-400"
-                    >
-                      <Text className="text-center text-white">Áp dụng</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View className="hidden">
-                  <FlatList
-                    data={Filters}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => {
-                      return (
-                        <>
-                          {item.title == 'Chuyên khoa' && (
-                            <FilterItems item={item} pageitem={true} />
-                          )}
-                        </>
-                      );
-                    }}
-                    style={styles.listContainer}
-                  />
-                </View>
+                <FilterDoctor
+                  closeModal={closeModal}
+                  setShowSpecialty={setShowSpecialty}
+                  setFilters={setFilters}
+                  showSpecialty={showSpecialty}
+                  initialFilters={filters}
+                />
               </Animated.View>
             </View>
           </Modal>
         </Pressable>
+      </View>
+      <View className="px-4 mt-4">
+        <Calendar setDate={setDate} date={date} />
+      </View>
+      <View className="px-4 mb-20 mt-4">
+        <CustomFlatlist
+          limit={5}
+          callApi={callApi}
+          showsVerticalScrollIndicator={true}
+          dependency={[filters, date]}
+          hiddenOutOfList={true}
+          renderItem={({item}) => {
+            return <DoctorDetail item={item} />;
+          }}
+        />
       </View>
     </SafeAreaView>
   );

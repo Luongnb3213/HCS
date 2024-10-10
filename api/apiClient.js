@@ -11,25 +11,25 @@ const apiClient = axios.create({
 });
 
 // Thêm Interceptor cho request để lấy token từ AsyncStorage
-apiClient.interceptors.request.use(
-    async (config) => {
-        try {
-            // Danh sách các URL không cần token
-            const noAuthRoutes = ['/auth/login', '/auth/register'];
+// apiClient.interceptors.request.use(
+//     async (config) => {
+//         try {
+//             // Danh sách các URL không cần token
+//             const noAuthRoutes = ['/auth/login', '/auth/register'];
 
-            // Nếu URL không nằm trong danh sách cần auth, không gắn token
-            if (!noAuthRoutes.includes(config.url)) {
-                const token = await AsyncStorage.getItem('token'); // Lấy token từ AsyncStorage
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`; // Gắn token vào header
-                }
-            }
-        } catch (error) {
-            console.log('Lỗi lấy token từ AsyncStorage:', error);
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+//             // Nếu URL không nằm trong danh sách cần auth, không gắn token
+//             if (!noAuthRoutes.includes(config.url)) {
+//                 const token = await AsyncStorage.getItem('token'); // Lấy token từ AsyncStorage
+//                 if (token) {
+//                     config.headers.Authorization = `Bearer ${token}`; // Gắn token vào header
+//                 }
+//             }
+//         } catch (error) {
+//             console.log('Lỗi lấy token từ AsyncStorage:', error);
+//         }
+//         return config;
+//     },
+//     (error) => Promise.reject(error)
+// );
 
 export default apiClient;
