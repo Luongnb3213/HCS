@@ -5,15 +5,15 @@ export const Filters = [
       fitlerArray: [
         {
           title: '0 - 500K',
-          value: '0,500',
+          value: '0,500000',
         },
         {
           title: '500k - 1000k',
-          value: '500,1000',
+          value: '500000,1000000',
         },
         {
           title: '1000k - 1,500k',
-          value: '1000,1500',
+          value: '1000000,1500000',
         },
       ],
       type: 'price',
@@ -27,28 +27,28 @@ export const Filters = [
           value: 'Giác mạc',
         },
         {
-          title: 'Giác mạc',
-          value: 'Giác mạc',
+          title: 'Chấn thương mắt',
+          value: 'Chấn thương mắt',
         },
         {
-          title: 'Giác mạc',
-          value: 'Giác mạc',
+          title: 'Tâm lý học lâm sàng',
+          value: 'Tâm lý học lâm sàng',
         },
         {
-          title: 'Giác mạc',
-          value: 'Giác mạc',
+          title: 'Mắt trẻ em',
+          value: 'Mắt trẻ em',
         },
         {
-          title: 'Giác mạc',
-          value: 'Giác mạc',
+          title: 'Thận tiết niệu',
+          value: 'Thân tiết niệu',
         },
         {
-          title: 'Giác mạc',
-          value: 'Giác mạc',
+          title: 'Phổi',
+          value: 'Phổi',
         },
         {
-          title: 'Giác mạc',
-          value: 'Giác mạc',
+          title: 'Dinh dưỡng',
+          value: 'Dinh dưỡng',
         },
       ],
       type: 'specialty',

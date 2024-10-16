@@ -1,225 +1,237 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import apiClient from '../../api/apiClient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeUser = ({ navigation }) => {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-    // Giả sử bạn lấy userId từ AsyncStorage hoặc prop
-    const userId = 1;
+  // Giả sử bạn lấy userId từ AsyncStorage hoặc prop
+  const userId = 1;
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await apiClient.get(`/users/${userId}`);
-                setUser(response.data);
-            } catch (error) {
-                console.log('Error fetching user data:', error);
-            }
-        };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await apiClient.get(`/users/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.log('Error fetching user data:', error);
+      }
+    };
 
-        fetchUser();
-    }, []);
+    fetchUser();
+  }, []);
 
-    return (
-        <ScrollView style={styles.container}>
-            <View style={styles.profileContainer}>
-                {user && (
-                    <>
-                        <Image 
-                            source={{ uri: user.profilePicture }} 
-                            style={styles.profileImage} 
-                        />
-                        <Text style={styles.profileName}>{user.fullName}</Text>
-                        <Text style={styles.points}>0 điểm</Text>
-                    </>
-                )}
-                <TouchableOpacity 
-                    style={styles.updateButton} 
-                    onPress={() => navigation.navigate('EditProfile')}
-                >
-                    <Text style={styles.updateButtonText}>Cập nhật</Text>
-                </TouchableOpacity>
-            </View>
+  return (
+    <SafeAreaView className="flex-1">
+      <ScrollView style={styles.container}>
+        <View style={styles.profileContainer}>
+          {user && (
+            <>
+              <Image
+                source={{ uri: user.profilePicture }}
+                style={styles.profileImage}
+              />
+              <Text style={styles.profileName}>{user.fullName}</Text>
+              <Text style={styles.points}>0 điểm</Text>
+            </>
+          )}
+          <TouchableOpacity
+            style={styles.updateButton}
+            onPress={() => navigation.navigate('EditProfile')}
+          >
+            <Text style={styles.updateButtonText}>Cập nhật</Text>
+          </TouchableOpacity>
+        </View>
 
-            <View style={styles.membershipContainer}>
-                <Text style={styles.membershipText}>Thành viên mới</Text>
-                <Text style={styles.membershipInfo}>
-                    Bạn cần thêm 1 điểm tích lũy để lên hạng Hạng Thành Viên
-                </Text>
-            </View>
+        <View style={styles.membershipContainer}>
+          <Text style={styles.membershipText}>Thành viên mới</Text>
+          <Text style={styles.membershipInfo}>
+            Bạn cần thêm 1 điểm tích lũy để lên hạng Hạng Thành Viên
+          </Text>
+        </View>
 
-            <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Tiện ích</Text>
-                <View style={styles.iconRow}>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_sos.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Gọi bác sĩ khẩn cấp</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_doctor_chat.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Hỏi riêng Bác sĩ</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_heart_rate.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Theo dõi chỉ số</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_discount.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Ưu đãi của tôi</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Tiện ích</Text>
+          <View style={styles.iconRow}>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_sos.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Gọi bác sĩ khẩn cấp</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_doctor_chat.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Hỏi riêng Bác sĩ</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_heart_rate.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Theo dõi chỉ số</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_discount.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Ưu đãi của tôi</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-            <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Dịch vụ của bạn</Text>
-                <View style={styles.iconRow}>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_calendar.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Lịch khám</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_orders.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Đơn hàng</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconItem}
-                                      onPress={() => navigation.navigate('HealthProfile')}>
-                        <Image 
-                            // source={require('./assets/icon_health_profile.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Hồ sơ sức khỏe</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconItem}>
-                        <Image 
-                            // source={require('./assets/icon_family.png')} 
-                            style={styles.iconImage} 
-                        />
-                        <Text style={styles.iconText}>Thành viên gia đình</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Dịch vụ của bạn</Text>
+          <View style={styles.iconRow}>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_calendar.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Lịch khám</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_orders.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Đơn hàng</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconItem}
+              onPress={() => navigation.navigate('HealthProfile')}
+            >
+              <Image
+                // source={require('./assets/icon_health_profile.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Hồ sơ sức khỏe</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconItem}>
+              <Image
+                // source={require('./assets/icon_family.png')}
+                style={styles.iconImage}
+              />
+              <Text style={styles.iconText}>Thành viên gia đình</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-            <View style={styles.settingsContainer}>
-                <TouchableOpacity style={styles.settingsItem}>
-                    <Text style={styles.settingsText}>Thiết lập ứng dụng</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.settingsItem}>
-                    <Text style={styles.settingsText}>Tài khoản</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.settingsItem}>
-                    <Text style={styles.settingsText}>Chính sách và hỗ trợ</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
-    );
+        <View style={styles.settingsContainer}>
+          <TouchableOpacity style={styles.settingsItem}>
+            <Text style={styles.settingsText}>Thiết lập ứng dụng</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.settingsItem}>
+            <Text style={styles.settingsText}>Tài khoản</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.settingsItem}>
+            <Text style={styles.settingsText}>Chính sách và hỗ trợ</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    profileContainer: {
-        alignItems: 'center',
-        paddingVertical: 20,
-        backgroundColor: '#f5f5f5',
-    },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-    },
-    profileName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 10,
-    },
-    points: {
-        fontSize: 16,
-        color: '#ff9900',
-        marginVertical: 5,
-    },
-    updateButton: {
-        backgroundColor: '#4caf50',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 20,
-    },
-    updateButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    membershipContainer: {
-        backgroundColor: '#fffbe0',
-        padding: 15,
-        marginVertical: 10,
-    },
-    membershipText: {
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    membershipInfo: {
-        color: '#999',
-        marginTop: 5,
-    },
-    sectionContainer: {
-        marginVertical: 10,
-        paddingHorizontal: 15,
-    },
-    sectionTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    iconRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    iconItem: {
-        alignItems: 'center',
-        width: '23%',
-    },
-    iconImage: {
-        width: 50,
-        height: 50,
-        marginBottom: 5,
-    },
-    iconText: {
-        textAlign: 'center',
-        fontSize: 12,
-        color: '#333',
-    },
-    settingsContainer: {
-        marginVertical: 20,
-        paddingHorizontal: 15,
-    },
-    settingsItem: {
-        paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    },
-    settingsText: {
-        fontSize: 16,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  profileContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  points: {
+    fontSize: 16,
+    color: '#ff9900',
+    marginVertical: 5,
+  },
+  updateButton: {
+    backgroundColor: '#4caf50',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  membershipContainer: {
+    backgroundColor: '#fffbe0',
+    padding: 15,
+    marginVertical: 10,
+  },
+  membershipText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  membershipInfo: {
+    color: '#999',
+    marginTop: 5,
+  },
+  sectionContainer: {
+    marginVertical: 10,
+    paddingHorizontal: 15,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  iconRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  iconItem: {
+    alignItems: 'center',
+    width: '23%',
+  },
+  iconImage: {
+    width: 50,
+    height: 50,
+    marginBottom: 5,
+  },
+  iconText: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#333',
+  },
+  settingsContainer: {
+    marginVertical: 20,
+    paddingHorizontal: 15,
+  },
+  settingsItem: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  settingsText: {
+    fontSize: 16,
+  },
 });
 
 export default HomeUser;

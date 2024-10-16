@@ -25,7 +25,7 @@ const DoctorDetail = ({item}) => {
       </View>
       <View className="flex-row items-center gap-3 mt-1 mb-2  justify-center">
         <Text className="w-[48%] bg-slate-300 rounded-lg  py-1 text-center">
-          361 lượt đặt khám
+          0 lượt đặt khám
         </Text>
         <Text className="w-[48%]  bg-slate-300 py-1 rounded-lg text-center">
           <AntDesign name="star" size={12} color="orange" />
