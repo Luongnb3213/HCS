@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import NotificationItem from '../../Components/NotificationItem';
+import apiClient from '../../api/apiClient';
+import CustomFlatlist from '../../Components/CustomFlatlist';
 
 const HomeNofication = ({ navigation }) => {
+  const callApi = useCallback(async (data) => {
+    try {
+      const response = await apiClient.post(`/notifications`, {
+        id: '5ee55dca-0eda-406d-8b3a-c58056ad2f9b',
+        pageSize: data.skip,
+      });
+      const result = await response?.data;
+      if (!result.length) return [];
+      return result;
+    } catch (error) {
+      console.log( 'errrorCallAPi',error);
+    }
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View>
@@ -17,21 +32,37 @@ const HomeNofication = ({ navigation }) => {
             Thông báo
           </Text>
         </View>
-        <View className="">
-          <View style={styles.iconContainer}>
-            <Image
-              source={{ uri: 'https://path_to_your_image/icon.png' }} // Thay bằng URL của ảnh icon
-              style={styles.icon}
-            />
-          </View>
-          <Text style={styles.noNotificationText}>Chưa có thông báo nào </Text>
-          <Text style={styles.subText}>
-            Thông báo của bạn sẽ xuất hiện ở đây sau khi bạn nhận được chúng.
-          </Text>
-        </View>
       </View>
-      <View className="px-4"> 
-        <NotificationItem />
+      <View className="px-4 h-full">
+        <CustomFlatlist
+          limit={5}
+          callApi={callApi}
+          showsVerticalScrollIndicator={true}
+          dependency={[]}
+          hiddenOutOfList={true}
+          RenderEmptyList={() => {
+            return (
+              <View className="">
+                <View style={styles.iconContainer}>
+                  <Image
+                    source={{ uri: 'https://path_to_your_image/icon.png' }} // Thay bằng URL của ảnh icon
+                    style={styles.icon}
+                  />
+                </View>
+                <Text style={styles.noNotificationText}>
+                  Chưa có thông báo nào{' '}
+                </Text>
+                <Text style={styles.subText}>
+                  Thông báo của bạn sẽ xuất hiện ở đây sau khi bạn nhận được
+                  chúng.
+                </Text>
+              </View>
+            );
+          }}
+          renderItem={({ item }) => {
+            return <NotificationItem item={item}  />;
+          }}
+        />
       </View>
     </SafeAreaView>
   );

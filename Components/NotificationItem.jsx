@@ -1,23 +1,29 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const NotificationItem = () => {
+const NotificationItem = ({ item }) => {
+  const title = {
+      APPOINTMENT: "APPOINTMENT",
+      MEDICATION: "MEDICATION",
+      GENERAL: "GENERAL"
+  }
+  const date = new Date(item.createdAt);
+
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const formattedDate = date.toLocaleDateString('en-US', options);
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.iconContainer}>
         <View style={styles.icon}>
-          <Text style={styles.iconText}>V</Text>
+          <Text style={styles.iconText}>{item.user.username.charAt(0)}</Text>
         </View>
       </View>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.title}>Vista rewards club....</Text>
-          <Text style={styles.date}>Dec 16, 2023</Text>
+          <Text style={styles.title}>{title[item.notificationType]}</Text>
+          <Text style={styles.date}>{formattedDate}</Text>
         </View>
-        <Text style={styles.message}>
-          Earn Points without making a purchase. Complete your first mission
-          today!
-        </Text>
+        <Text style={styles.message}>{item.content}</Text>
       </View>
       <View style={styles.status}>
         <View style={styles.dot}></View>
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f48fb1', 
+    backgroundColor: '#f48fb1',
     justifyContent: 'center',
     alignItems: 'center',
   },

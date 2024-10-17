@@ -13,7 +13,10 @@ const CustomFlatlist = ({
   limit,
   dependency,
   hiddenOutOfList,
-  showsVerticalScrollIndicator = true
+  showsVerticalScrollIndicator = true,
+  RenderEmptyList = () => {
+    return <Text>Danh sách trống</Text>;
+  },
 }) => {
   const [data, setData] = useState([]);
   const [UI, setUI] = useState(false);
@@ -23,7 +26,7 @@ const CustomFlatlist = ({
   const isLoading = useRef(false);
   useEffect(() => {
     getData('refresh');
-  }, [dependency]);
+  }, dependency);
 
   const getData = async (type) => {
     if (isLoading.current == true) return; // Nếu đang loading mà vẫn gọi hàm ==> return
@@ -37,12 +40,12 @@ const CustomFlatlist = ({
       isLoading.current = true;
       //call api
       const response = await callApi({
-        skip: type == 'loadMore' ? data.length : 0,
+        skip: type == 'loadMore' ? data?.length : 0,
         limit: limit,
       });
       await new Promise((resolve) => setTimeout(resolve, 1000));
       isLoading.current = false;
-      if (response.length < limit) {
+      if (response?.length < limit) {
         isStop.current = true;
       }
       if (type == 'refresh') {
@@ -62,11 +65,10 @@ const CustomFlatlist = ({
     if (UI)
       return (
         <View className="flex-1 flex items-center justify-center">
-          
           <ActivityIndicator color={'red'} />
         </View>
       );
-    if (data.length == 0 && isStop.current) return <Text>Danh sách trống</Text>;
+    if (data?.length == 0 && isStop.current) return <RenderEmptyList />;
     if (isStop.current)
       return (
         <Text className={`${hiddenOutOfList ? 'hidden' : ''}`}>
