@@ -73,6 +73,8 @@ const DoctorSchedule = ({ navigation }) => {
         const response = await apiClient.post(`doctors/filter`, {
           ...filters,
           date: date,
+          pageSize: data.skip,
+          limit: data.limit
         });
         const result = await response.data;
         return result;

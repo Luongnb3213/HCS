@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,12 +9,12 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
-import ImageUploader from "../../Components/ImageUploader";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import ImageUploader from '../../Components/ImageUploader';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -25,7 +25,7 @@ Notifications.setNotificationHandler({
 });
 
 const Home = ({ navigation }) => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   // const [expoPushToken, setExpoPushToken] = useState('');
   // const [channels, setChannels] = useState([]);
   // const [notification, setNotification] = useState(undefined);
@@ -86,7 +86,9 @@ const Home = ({ navigation }) => {
         {/* Banner */}
         <View className="bg-white p-4 mt-4 rounded-lg shadow mx-4">
           <Image
-            source={{ uri: "https://www.shutterstock.com/image-photo/hands-doctor-clipboard-writing-notes-600nw-2507090935.jpg" }} // Thay bằng link ảnh banner thật
+            source={{
+              uri: 'https://www.shutterstock.com/image-photo/hands-doctor-clipboard-writing-notes-600nw-2507090935.jpg',
+            }} // Thay bằng link ảnh banner thật
             className="w-full h-40 rounded-lg"
             resizeMode="cover"
           />
@@ -101,24 +103,33 @@ const Home = ({ navigation }) => {
             <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
                 source={{
-                  uri: "https://cdn-icons-png.flaticon.com/512/4320/4320337.png",
+                  uri: 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png',
                 }} // Thay bằng link icon thật
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">Mua sắm</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/3 p-2 items-center">
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('doctorSchedule');
+              }}
+              className="w-1/3 p-2 items-center"
+            >
               <Image
-                source={{ uri: "https://cdn-icons-png.flaticon.com/512/2991/2991158.png" }}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/2991/2991158.png',
+                }}
                 className="w-12 h-12"
               />
-              <Text className="text-gray-700 text-sm mt-2">Gọi bác sĩ</Text>
+              <Text className="text-gray-700 text-sm mt-2">Đặt hẹn bác sĩ</Text>
             </TouchableOpacity>
 
             <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: "https://cdn-icons-png.flaticon.com/512/2804/2804650.png" }}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/2804/2804650.png',
+                }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
@@ -126,17 +137,26 @@ const Home = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/3 p-2 items-center">
+            <TouchableOpacity
+              className="w-1/3 p-2 items-center"
+              onPress={() => {
+                navigation.navigate('medicalSchedule');
+              }}
+            >
               <Image
-                source={{ uri: "https://cdn-icons-png.flaticon.com/512/7284/7284037.png" }}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/7284/7284037.png',
+                }}
                 className="w-12 h-12"
               />
-              <Text className="text-gray-700 text-sm mt-2">Hỏi đáp y tế</Text>
+              <Text className="text-gray-700 text-sm mt-2">Lịch hẹn</Text>
             </TouchableOpacity>
 
             <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: "https://cdn-icons-png.flaticon.com/512/7757/7757793.png" }}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/7757/7757793.png',
+                }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
@@ -146,7 +166,9 @@ const Home = ({ navigation }) => {
 
             <TouchableOpacity className="w-1/3 p-2 items-center">
               <Image
-                source={{ uri: "https://cdn-icons-png.flaticon.com/512/843/843169.png" }}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/843/843169.png',
+                }}
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
@@ -237,7 +259,7 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 
