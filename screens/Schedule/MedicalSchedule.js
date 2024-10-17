@@ -32,7 +32,7 @@ const MedicalSchedule = ({ navigation }) => {
     async (data) => {
       try {
         const response = await apiClient.get(
-          `/appointment?id=5ee55dca-0eda-406d-8b3a-c58056ad2f9b&status=${status}`
+          `/appointment?id=5ee55dca-0eda-406d-8b3a-c58056ad2f9b&status=${status}&pageSize=${data.skip}`
         );
         const result = await response.data;
         return result;
