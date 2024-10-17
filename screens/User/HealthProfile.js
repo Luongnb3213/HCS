@@ -4,8 +4,8 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  StyleSheet,
   ScrollView,
+  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,9 +14,7 @@ import apiClient from "../../api/apiClient";
 const HealthProfile = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-
-  // Giả sử bạn lấy userId từ AsyncStorage hoặc prop
-  const userId = 1;
+  const userId = 1; // Placeholder
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,45 +25,33 @@ const HealthProfile = () => {
         console.log("Error fetching user data:", error);
       }
     };
-
     fetchUser();
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView className="flex-1 bg-white">
       {/* Custom Header */}
-      <View style={styles.header}>
-        {/* Nút back */}
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
+      <View className="bg-green-500 flex-row justify-between items-center p-4">
+        <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-
-        {/* Tiêu đề */}
-        <Text style={styles.headerTitle}>Hồ Sơ Sức Khỏe</Text>
-
-        {/* Nút Tải lên */}
-        <TouchableOpacity
-          style={styles.uploadButton}
-          onPress={() => alert("Upload")}
-        >
-          <Text style={styles.uploadText}>Tải lên</Text>
+        <Text className="text-white text-lg font-bold">Hồ Sơ Sức Khỏe</Text>
+        <TouchableOpacity className="p-2" onPress={() => alert("Upload")}>
+          <Text className="text-white text-sm">Tải lên</Text>
         </TouchableOpacity>
       </View>
 
       {/* Profile Section */}
-      <View style={styles.profileSection}>
+      <View className="flex-row items-center p-4 bg-gray-100">
         {user && (
           <>
             <Image
-              source={{ uri: user.profilePicture }} 
-              style={styles.profileImage}
+              source={{ uri: user.profilePicture }}
+              className="w-16 h-16 rounded-full"
             />
-            <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{user.fullName}</Text>
-              <Text style={styles.profileDetails}>
+            <View className="ml-4">
+              <Text className="text-base font-bold">{user.fullName}</Text>
+              <Text className="text-sm text-gray-600">
                 0 Lần khám | 0 Thành viên | BMI --
               </Text>
             </View>
@@ -74,177 +60,46 @@ const HealthProfile = () => {
       </View>
 
       {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.actionButton}>
-          {/* <Image source={require('./assets/icon_result.png')} style={styles.actionIcon} /> */}
-          <Text style={styles.actionText}>Xem kết quả khám</Text>
+      <View className="flex-row justify-around py-4 bg-white">
+        <TouchableOpacity className="items-center">
+          <Text className="text-sm text-center">Xem kết quả khám</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
-          {/* <Image source={require('./assets/icon_health_monitor.png')} style={styles.actionIcon} /> */}
-          <Text style={styles.actionText}>Theo dõi sức khỏe</Text>
+        <TouchableOpacity className="items-center">
+          <Text className="text-sm text-center">Theo dõi sức khỏe</Text>
         </TouchableOpacity>
       </View>
 
       {/* Family & Friends Health Profile */}
-      <View style={styles.familySection}>
-        <Text style={styles.sectionTitle}>
+      <View className="p-4">
+        <Text className="text-base font-bold mb-2">
           Hồ sơ sức khỏe người thân, bạn bè
         </Text>
-        <View style={styles.familyActions}>
-          <TouchableOpacity style={styles.familyButton}>
-            {/* <Image source={require('./assets/icon_family.png')} style={styles.familyIcon} /> */}
-            <Text style={styles.familyText}>Bạn bè</Text>
+        <View className="flex-row justify-between">
+          <TouchableOpacity className="items-center w-1/2">
+            <Text className="text-sm text-center">Bạn bè</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.familyButton}>
-            {/* <Image source={require('./assets/icon_add_member.png')} style={styles.familyIcon} /> */}
-            <Text style={styles.familyText}>Thêm thành viên</Text>
+          <TouchableOpacity className="items-center w-1/2">
+            <Text className="text-sm text-center">Thêm thành viên</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* No Health Record Section */}
-      <View style={styles.noRecordSection}>
-        {/* <Image source={require('./assets/icon_no_record.png')} style={styles.noRecordImage} /> */}
-        <Text style={styles.noRecordText}>Không có hồ sơ sức khỏe</Text>
+      <View className="items-center py-6">
+        <Text className="text-base text-gray-500">Không có hồ sơ sức khỏe</Text>
       </View>
 
       {/* Options */}
-      <View style={styles.optionButtons}>
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionButtonText}>Xem kết quả khám</Text>
+      <View className="p-4">
+        <TouchableOpacity className="bg-green-500 p-4 rounded-lg mb-2 items-center">
+          <Text className="text-white text-base">Xem kết quả khám</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionButtonText}>Tải lên hồ sơ sức khỏe</Text>
+        <TouchableOpacity className="bg-green-500 p-4 rounded-lg items-center">
+          <Text className="text-white text-base">Tải lên hồ sơ sức khỏe</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    backgroundColor: "#1abc9c",
-    flexDirection: "row",
-    justifyContent: "space-between", // Căn đều các phần tử trong header
-    alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-  },
-  backButton: {
-    padding: 10,
-  },
-  backText: {
-    color: "#fff",
-    fontSize: 18,
-  },
-  headerTitle: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  uploadButton: {
-    padding: 10,
-  },
-  uploadText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-  profileSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    backgroundColor: "#f5f5f5",
-  },
-  profileImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
-  profileInfo: {
-    marginLeft: 15,
-  },
-  profileName: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  profileDetails: {
-    fontSize: 14,
-    color: "#777",
-  },
-  actionButtons: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 20,
-    backgroundColor: "#fff",
-  },
-  actionButton: {
-    alignItems: "center",
-  },
-  actionIcon: {
-    width: 40,
-    height: 40,
-    marginBottom: 5,
-  },
-  actionText: {
-    fontSize: 14,
-    textAlign: "center",
-  },
-  familySection: {
-    padding: 15,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  familyActions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  familyButton: {
-    alignItems: "center",
-    width: "45%",
-  },
-  familyIcon: {
-    width: 40,
-    height: 40,
-    marginBottom: 5,
-  },
-  familyText: {
-    fontSize: 14,
-    textAlign: "center",
-  },
-  noRecordSection: {
-    alignItems: "center",
-    padding: 20,
-  },
-  noRecordImage: {
-    width: 60,
-    height: 60,
-    marginBottom: 10,
-  },
-  noRecordText: {
-    fontSize: 16,
-    color: "#999",
-  },
-  optionButtons: {
-    padding: 15,
-  },
-  optionButton: {
-    backgroundColor: "#1abc9c",
-    paddingVertical: 15,
-    borderRadius: 8,
-    marginVertical: 5,
-    alignItems: "center",
-  },
-  optionButtonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-});
 
 export default HealthProfile;

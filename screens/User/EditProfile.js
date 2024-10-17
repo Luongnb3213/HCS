@@ -5,12 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  StyleSheet,
   ScrollView,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-// import { Picker } from '@react-native-picker/picker';
 import apiClient from "../../api/apiClient";
 
 const EditProfile = () => {
@@ -29,6 +27,7 @@ const EditProfile = () => {
 
     fetchUser();
   }, []);
+
   const [profilePicture, setProfilePicture] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -42,10 +41,10 @@ const EditProfile = () => {
 
   useEffect(() => {
     if (user) {
-      setProfilePicture(user.profilePicture || "http//#.com");
-      setName(user.fullName || ""); // Set default to empty string if user.fullName is undefined
+      setProfilePicture(user.profilePicture || "https://w7.pngwing.com/pngs/177/551/png-transparent-user-interface-design-computer-icons-default-stephen-salazar-graphy-user-interface-design-computer-wallpaper-sphere-thumbnail.png");
+      setName(user.fullName || "");
       setPhone(user.phone || "");
-      setGender(user.gender || "MALE"); // Assuming "Nam" is the default
+      setGender(user.gender || "MALE");
       setDob(user.dateOfBirth || "");
       setIdNumber(user.idNumber || "");
       setAddress(user.address || "");
@@ -65,64 +64,66 @@ const EditProfile = () => {
 
       const response = await apiClient.put(`/users/${userId}`, updatedUser);
       console.log("data:", response.data.message);
-      // Alert.alert("Cập nhật thành công!", response.data.message);
-      navigation.goBack(); // Quay lại màn hình trước
+      navigation.goBack();
     } catch (error) {
       console.log("Error updating user data:", error);
-      // Alert.alert("Cập nhật thất bại", "Có lỗi xảy ra khi cập nhật thông tin.");
     }
   };
 
+  const formatPhoneNumber = (phoneNumber) => {
+    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+    if (cleaned.length === 10 && cleaned.startsWith("0")) {
+      const withoutZero = cleaned.substring(1);
+      return withoutZero.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
+    }
+    if (cleaned.length === 9) {
+      return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
+    }
+    return cleaned;
+  };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        {/* Nút back */}
+    <ScrollView className="flex-1 bg-gray-100">
+      <View className="flex-row items-center justify-center bg-green-500 px-4 py-3 relative">
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
+          className="absolute left-4"
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-
-        {/* Tiêu đề */}
-        <Text style={styles.headerTitle}>Sửa thông tin</Text>
+        <Text className="text-lg font-bold text-white">Sửa thông tin</Text>
       </View>
 
-      {/* Profile Image */}
-      <View style={styles.profileSection}>
+      <View className="items-center my-5">
         <Image
           source={{ uri: profilePicture }}
-          style={styles.profileImage}
+          className="w-24 h-24 rounded-full"
         />
-        <TouchableOpacity style={styles.cameraIcon}>
-          {/* <Image source={require('./assets/icon_camera.png')} style={styles.icon} /> */}
+        <TouchableOpacity className="absolute bottom-0 right-28 p-1 bg-white rounded-full">
+          {/* Icon camera */}
         </TouchableOpacity>
       </View>
 
-      {/* CCD Scan */}
-      <TouchableOpacity style={styles.ccdScan}>
-        {/* <Image source={require('./assets/icon_scan.png')} style={styles.scanIcon} /> */}
-        <Text style={styles.scanText}>Quét CCCD để nhập nhanh thông tin</Text>
+      <TouchableOpacity className="flex-row items-center justify-center p-2 bg-gray-300 rounded mx-5">
+        <Text className="text-base text-gray-700">
+          Quét CCCD để nhập nhanh thông tin
+        </Text>
       </TouchableOpacity>
 
-      {/* Form Fields */}
-      <View style={styles.form}>
-        {/* Name */}
-        <Text style={styles.label}>Họ và tên *</Text>
+      <View className="px-5 mt-5">
+        <Text className="text-base mb-2">Họ và tên *</Text>
         <TextInput
-          style={styles.input}
+          className="border border-gray-300 rounded p-2 mb-4"
           value={name}
           onChangeText={setName}
           placeholder="Họ và tên"
         />
 
-        {/* Phone */}
-        <Text style={styles.label}>Số điện thoại *</Text>
-        <View style={styles.phoneInput}>
-          <Text style={styles.phoneCode}>+84</Text>
+        <Text className="text-base mb-2">Số điện thoại *</Text>
+        <View className="flex-row items-center border border-gray-300 rounded mb-4">
+          <Text className="px-3 border-r border-gray-300 text-base">+84</Text>
           <TextInput
-            style={styles.phoneTextInput}
+            className="flex-1 p-2"
             value={formatPhoneNumber(phone)}
             onChangeText={(text) => setPhone(formatPhoneNumber(text))}
             keyboardType="phone-pad"
@@ -130,263 +131,74 @@ const EditProfile = () => {
           />
         </View>
 
-        {/* Date of Birth */}
-        <Text style={styles.label}>Ngày sinh *</Text>
+        <Text className="text-base mb-2">Ngày sinh *</Text>
         <TextInput
-          style={styles.input}
+          className="border border-gray-300 rounded p-2 mb-4"
           value={dob}
           onChangeText={setDob}
           keyboardType="phone-pad"
           placeholder="Chọn ngày sinh"
         />
 
-        {/* Gender */}
-        <View style={styles.genderSection}>
-          <Text style={styles.label}>Giới tính *</Text>
-          <View style={styles.genderOptions}>
+        <View className="mb-4">
+          <Text className="text-base mb-2">Giới tính *</Text>
+          <View className="flex-row justify-around">
             <TouchableOpacity
-              style={[
-                styles.genderButton,
-                gender === "MALE" ? styles.selected : {},
-              ]}
+              className={`py-2 px-6 border border-gray-300 rounded ${
+                gender === "MALE" ? "bg-green-500" : ""
+              }`}
               onPress={() => setGender("MALE")}
             >
-              <Text style={styles.genderText}>Nam</Text>
+              <Text
+                className={`${
+                  gender === "MALE" ? "text-white" : "text-gray-700"
+                }`}
+              >
+                Nam
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.genderButton,
-                gender === "FEMALE" ? styles.selected : {},
-              ]}
+              className={`py-2 px-6 border border-gray-300 rounded ${
+                gender === "FEMALE" ? "bg-green-500" : ""
+              }`}
               onPress={() => setGender("FEMALE")}
             >
-              <Text style={styles.genderText}>Nữ</Text>
+              <Text
+                className={`${
+                  gender === "FEMALE" ? "text-white" : "text-gray-700"
+                }`}
+              >
+                Nữ
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* ID Number */}
-        <Text style={styles.label}>Số Căn cước/ CMTND</Text>
+        <Text className="text-base mb-2">Số Căn cước/ CMTND</Text>
         <TextInput
-          style={styles.input}
+          className="border border-gray-300 rounded p-2 mb-4"
           value={idNumber}
           onChangeText={setIdNumber}
           placeholder="Nhập Số Căn cước/ CMTND"
         />
-        <TouchableOpacity style={styles.idScanIcon}>
-          {/* <Image source={require('./assets/icon_scan.png')} style={styles.scanIcon} /> */}
-        </TouchableOpacity>
 
-        {/* Address */}
-        <Text style={styles.label}>Địa chỉ *</Text>
+        <Text className="text-base mb-2">Địa chỉ *</Text>
         <TextInput
-          style={styles.input}
+          className="border border-gray-300 rounded p-2 mb-4"
           value={address}
           onChangeText={setAddress}
           placeholder="Chọn địa chỉ"
         />
-
-        {/* Ethnicity and Nationality */}
-        <View style={styles.row}>
-          {/* <View style={styles.column}>
-                        <Text style={styles.label}>Dân tộc *</Text>
-                        <Picker
-                            selectedValue={ethnicity}
-                            style={styles.picker}
-                            onValueChange={(itemValue) => setEthnicity(itemValue)}
-                        >
-                            <Picker.Item label="Chọn dân tộc" value="" />
-                            <Picker.Item label="Kinh" value="Kinh" />
-                            <Picker.Item label="Tày" value="Tày" />
-                            <Picker.Item label="Thái" value="Thái" />
-                        </Picker>
-                    </View> */}
-          {/* <View style={styles.column}>
-                        <Text style={styles.label}>Quốc tịch *</Text>
-                        <Picker
-                            selectedValue={nationality}
-                            style={styles.picker}
-                            onValueChange={(itemValue) => setNationality(itemValue)}
-                        >
-                            <Picker.Item label="Chọn quốc tịch" value="" />
-                            <Picker.Item label="Việt Nam" value="Việt Nam" />
-                            <Picker.Item label="USA" value="USA" />
-                            <Picker.Item label="Japan" value="Japan" />
-                        </Picker>
-                    </View> */}
-        </View>
       </View>
 
-      {/* Complete Button */}
-      <TouchableOpacity style={styles.completeButton} onPress={handleUpdateUser}>
-        <Text style={styles.completeButtonText}>Hoàn thành</Text>
+      <TouchableOpacity
+        className="bg-green-500 p-3 rounded mx-5 mt-5 items-center"
+        onPress={handleUpdateUser}
+      >
+        <Text className="text-white text-base">Hoàn thành</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
-
-const formatPhoneNumber = (phoneNumber) => {
-  // Loại bỏ tất cả các ký tự không phải số
-  const cleaned = ('' + phoneNumber).replace(/\D/g, '');
-
-  // Nếu có 10 số và bắt đầu bằng số 0, cắt số 0 và chuyển sang +84
-  if (cleaned.length === 10 && cleaned.startsWith('0')) {
-    const withoutZero = cleaned.substring(1); // Cắt số 0 đầu
-    return withoutZero.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
-  }
-
-  // Nếu có 9 số, format theo chuẩn XXX XXX XXX
-  if (cleaned.length === 9) {
-    return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
-  }
-
-  return cleaned; // Trả về nguyên bản nếu không đủ 9 hoặc 10 số
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    flexDirection: "row", // Đặt các phần tử theo hàng ngang
-    alignItems: "center", // Can giữa theo trục dọc
-    justifyContent: "center", // Can giữa nội dung theo trục ngang
-    backgroundColor: "#1abc9c",
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    position: "relative",
-  },
-  backButton: {
-    position: "absolute", // Đặt nút back ở bên trái
-    left: 15,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  profileSection: {
-    alignItems: "center",
-    marginVertical: 20,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  cameraIcon: {
-    position: "absolute",
-    bottom: 0,
-    right: 140,
-    padding: 5,
-    backgroundColor: "#fff",
-    borderRadius: 50,
-  },
-  icon: {
-    width: 25,
-    height: 25,
-  },
-  ccdScan: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 5,
-    marginHorizontal: 20,
-  },
-  scanIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-  },
-  scanText: {
-    fontSize: 14,
-    color: "#333",
-  },
-  form: {
-    paddingHorizontal: 20,
-  },
-  label: {
-    fontSize: 14,
-    marginVertical: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
-  },
-  phoneInput: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    marginBottom: 15,
-  },
-  phoneCode: {
-    padding: 10,
-    borderRightWidth: 1,
-    borderRightColor: "#ddd",
-    fontSize: 16,
-    color: "#333",
-  },
-  phoneTextInput: {
-    flex: 1,
-    padding: 10,
-  },
-  genderSection: {
-    marginBottom: 15,
-  },
-  genderOptions: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  genderButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-  },
-  selected: {
-    backgroundColor: "#1abc9c",
-  },
-  genderText: {
-    color: "#333",
-  },
-  idScanIcon: {
-    position: "absolute",
-    right: 30,
-    top: 45,
-    padding: 10,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  column: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-  },
-  completeButton: {
-    backgroundColor: "#1abc9c",
-    padding: 15,
-    borderRadius: 10,
-    margin: 20,
-    alignItems: "center",
-  },
-  completeButtonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-});
 
 export default EditProfile;
