@@ -8,7 +8,6 @@ const PostDetail = ({ route, navigation }) => {
   const [comments, setComments] = useState([]);
   const [userRole, setUserRole] = useState(null);
 
-  // Fetch the post details
   useEffect(() => {
     const fetchPost = async () => {
       const storedPosts = await AsyncStorage.getItem('posts');
@@ -19,7 +18,6 @@ const PostDetail = ({ route, navigation }) => {
     fetchPost();
   }, [postId]);
 
-  // Fetch the comments related to the post
   useEffect(() => {
     const fetchComments = async () => {
       const storedComments = await AsyncStorage.getItem('comments');
@@ -30,13 +28,12 @@ const PostDetail = ({ route, navigation }) => {
     fetchComments();
   }, [postId]);
 
-  // Fetch the user role to determine if the reply button should be shown
   useEffect(() => {
     const fetchUserRole = async () => {
       const storedUser = await AsyncStorage.getItem('currentUser');
       const user = storedUser ? JSON.parse(storedUser) : null;
       if (user) {
-        setUserRole(user.role); // Assuming user object has a role field
+        setUserRole(user.role);
       }
     };
     fetchUserRole();
@@ -46,13 +43,11 @@ const PostDetail = ({ route, navigation }) => {
 
   return (
     <View>
-      {/* Post details */}
       <Text>{post.title}</Text>
       <Text>{post.content}</Text>
       <Text>{post.category}</Text>
       <Text>{JSON.stringify(post.tags)}</Text>
 
-      {/* Comments list */}
       <Text>Comments:</Text>
       <FlatList
         data={comments}
@@ -62,11 +57,16 @@ const PostDetail = ({ route, navigation }) => {
             <Text>User {item.userId}:</Text>
             <Text>{item.content}</Text>
             <Text>Likes: {item.likes}</Text>
+            {userRole === 'DOCTOR' && (
+              <Button
+                title="Edit"
+                onPress={() => navigation.navigate('CommentEdit', { commentId: item.id, postId })}
+              />
+            )}
           </View>
         )}
       />
 
-      {/* Button for Doctors to add a comment */}
       {userRole === 'DOCTOR' && (
         <Button
           title="Reply"
