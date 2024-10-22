@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AuthContext from '../constants/AuthContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
@@ -16,41 +17,75 @@ import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
 import DoctorSchedule from '../screens/Schedule/ScheduleDoctor';
 import HealthProfile from '../screens/User/HealthProfile';
 import EditProfile from '../screens/User/EditProfile';
-import DoctorAppointment from '../screens/Schedule/DoctorAppointment'
+import DoctorAppointment from '../screens/Schedule/DoctorAppointment';
 import BookingScreen from '../screens/Schedule/BookingScreen';
+
 const HomeScreen = () => {
+  const { user } = useContext(AuthContext);
   const HomeStack = createStackNavigator();
   return (
-    <HomeStack.Navigator
-      screenOptions={{
-        headerShown: false,
-        animationEnabled: true,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        
-      }}
-    >
-      <HomeStack.Screen
-        options={{      
-          gestureDirection: 'horizontal',
-          gestureEnabled: true,
-
+    <>
+      <HomeStack.Navigator
+        screenOptions={{
+          headerShown: false,
+          animationEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
-        name="Home"
-        component={Home}
-      />
-      <HomeStack.Screen name="bookingscreen" component={BookingScreen} />
-      <HomeStack.Screen name="medicalSchedule" component={MedicalSchedule} />
-      <HomeStack.Screen name="doctorSchedule" component={DoctorSchedule} />
-      <HomeStack.Screen name="doctorappointment" component={DoctorAppointment} />
-      <HomeStack.Screen name="Authentication" component={Authentication} />
-    </HomeStack.Navigator>
+      >
+        {user ? (
+          <>
+            <HomeStack.Screen
+              options={{
+                gestureDirection: 'horizontal',
+                gestureEnabled: true,
+              }}
+              name="Home"
+              component={Home}
+            />
+            <HomeStack.Screen name="bookingscreen" component={BookingScreen} />
+            <HomeStack.Screen
+              name="medicalSchedule"
+              component={MedicalSchedule}
+            />
+            <HomeStack.Screen
+              name="doctorSchedule"
+              component={DoctorSchedule}
+            />
+            <HomeStack.Screen
+              name="doctorappointment"
+              component={DoctorAppointment}
+            />
+          </>
+        ) : (
+          <>
+            <HomeStack.Screen
+              options={{
+                gestureDirection: 'horizontal',
+                gestureEnabled: true,
+              }}
+              name="Home"
+              component={Home}
+            />
+            <HomeStack.Screen
+              name="Authentication"
+              component={Authentication}
+            />
+          </>
+        )}
+      </HomeStack.Navigator>
+    </>
   );
 };
 const NoficationScreen = () => {
   const nofiStack = createStackNavigator();
+  const { user } = useContext(AuthContext);
   return (
     <nofiStack.Navigator screenOptions={{ headerShown: false }}>
-      <nofiStack.Screen name="Notification" component={HomeNofication} />
+      {user ? (
+        <nofiStack.Screen name="Notification" component={HomeNofication} />
+      ) : (
+        <nofiStack.Screen name="Authentication" component={Authentication} />
+      )}
     </nofiStack.Navigator>
   );
 };
