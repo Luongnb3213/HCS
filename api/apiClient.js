@@ -1,27 +1,25 @@
 import axios from 'axios';
+import { useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from '../constants/AuthContext';
 
-// Tạo instance của Axios
 const apiClient = axios.create({
-    baseURL: 'http://192.168.0.102:5000',
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+  baseURL: 'http://10.33.49.46:5000',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-// Thêm Interceptor cho request để lấy token từ AsyncStorage
 // apiClient.interceptors.request.use(
 //     async (config) => {
 //         try {
-//             // Danh sách các URL không cần token
 //             const noAuthRoutes = ['/auth/login', '/auth/register'];
 
-//             // Nếu URL không nằm trong danh sách cần auth, không gắn token
 //             if (!noAuthRoutes.includes(config.url)) {
-//                 const token = await AsyncStorage.getItem('token'); // Lấy token từ AsyncStorage
+//                 const token = await AsyncStorage.getItem('token');
 //                 if (token) {
-//                     config.headers.Authorization = `Bearer ${token}`; // Gắn token vào header
+//                     config.headers.Authorization = `Bearer ${token}`;
 //                 }
 //             }
 //         } catch (error) {
@@ -31,5 +29,51 @@ const apiClient = axios.create({
 //     },
 //     (error) => Promise.reject(error)
 // );
+
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const { response } = error;
+    if (response && response.status === 403) {
+      try {
+        const refreshToken = await AsyncStorage.getItem('refreshToken');
+        if (refreshToken) {
+          const res = await axios.post('http://192.168.1.115:5000/auth/token', {
+            refreshToken: refreshToken,
+          });
+          const newToken = res.data.token;
+          await AsyncStorage.setItem('token', newToken);
+          handleLoginWithNewToken(newToken);
+          error.config.headers.Authorization = `Bearer ${newToken}`;
+          return apiClient(error.config);
+        } else {
+          console.log('Refresh token hết hạn');
+          await handleLogout();
+        }
+      } catch (refreshError) {
+        console.log('Lỗi làm mới token:', refreshError);
+        await handleLogout();
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+const handleLogout = async () => {
+  await AsyncStorage.removeItem('token');
+  await AsyncStorage.removeItem('refreshToken');
+
+  const { setUser, setToken } = useContext(AuthContext);
+  setUser(null);
+  setToken('notoken');
+};
+
+const handleLoginWithNewToken = async (token) => {
+    const { setToken } = useContext(AuthContext);
+    setToken(token);
+  };
 
 export default apiClient;
