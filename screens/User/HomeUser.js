@@ -60,21 +60,27 @@ const HomeUser = ({ navigation }) => {
           <View className="flex-row justify-between">
             <TouchableOpacity className="w-1/4 items-center">
               <Image
-                // source={require('./assets/icon_sos.png')}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/2991/2991158.png',
+                }}
                 className="w-12 h-12 mb-2"
               />
               <Text className="text-center text-sm">Gọi bác sĩ khẩn cấp</Text>
             </TouchableOpacity>
             <TouchableOpacity className="w-1/4 items-center">
               <Image
-                // source={require('./assets/icon_doctor_chat.png')}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/2804/2804650.png',
+                }}
                 className="w-12 h-12 mb-2"
               />
               <Text className="text-center text-sm">Hỏi riêng Bác sĩ</Text>
             </TouchableOpacity>
             <TouchableOpacity className="w-1/4 items-center">
               <Image
-                // source={require('./assets/icon_heart_rate.png')}
+                source={{
+                  uri: "https://cdn-icons-png.flaticon.com/512/3658/3658154.png"
+                }}
                 className="w-12 h-12 mb-2"
               />
               <Text className="text-center text-sm">Theo dõi chỉ số</Text>
@@ -96,7 +102,9 @@ const HomeUser = ({ navigation }) => {
           <View className="flex-row justify-between">
             <TouchableOpacity className="w-1/4 items-center">
               <Image
-                // source={require('./assets/icon_calendar.png')}
+                source={{
+                  uri: "https://cdn-icons-png.flaticon.com/512/7284/7284037.png",
+                }}
                 className="w-12 h-12 mb-2"
               />
               <Text className="text-center text-sm">Lịch khám</Text>
