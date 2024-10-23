@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext from '../constants/AuthContext';
 
 const apiClient = axios.create({
-  baseURL: 'http://10.33.49.46:5000',
+  baseURL: 'http://192.168.100.181',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
       try {
         const refreshToken = await AsyncStorage.getItem('refreshToken');
         if (refreshToken) {
-          const res = await axios.post('http://192.168.1.115:5000/auth/token', {
+          const res = await axios.post('http://192.168.100.181/auth/token', {
             refreshToken: refreshToken,
           });
           const newToken = res.data.token;

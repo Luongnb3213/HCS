@@ -2,27 +2,38 @@ import { useEffect, useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Không cần dùng {} cho jwtDecode
 import AuthContext from './constants/AuthContext';
+
 export default function App() {
-  const tokenStorage = AsyncStorage.getItem('token');
   const [modalVisible, setModalVisible] = useState(false);
-  const [token, setToken] = useState(tokenStorage);
+  const [token, setToken] = useState(null); // Khởi tạo với null
   const [user, setUser] = useState(null);
+
   useEffect(() => {
-    const getToken = () => {
-      if (token && token != 'notoken') {
-        setToken(token);
-        const decoded = jwtDecode(token);
-        setUser(decoded);
+    const getToken = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('token');
+        if (storedToken && storedToken !== 'notoken') {
+          setToken(storedToken);
+          const decoded = jwtDecode(storedToken);
+          setUser(decoded);
+        } else {
+          setToken('notoken');
+        }
+      } catch (error) {
+        console.error('Error retrieving token from AsyncStorage:', error);
       }
     };
     getToken();
-  }, [token]);
+  }, []);
+
+  console.log(token); // Token sẽ được log đúng sau khi được lấy từ AsyncStorage
+
   return (
     <AuthContext.Provider value={{ user, setUser, setToken }}>
       <AppNavigator />
-      {token == 'notoken' && (
+      {token === 'notoken' && (
         <Modal
           animationType="slide"
           transparent={true}
