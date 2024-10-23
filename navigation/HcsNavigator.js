@@ -1,24 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import AuthContext from '../constants/AuthContext';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   createStackNavigator,
   CardStyleInterpolators,
-} from '@react-navigation/stack';
-import Authentication from './Authentication';
-import { Home, Test } from '../screens/Home';
-import { HomeUser } from '../screens/User/';
-import { HomeNofication } from '../screens/Nofication/';
-import { HomeSocial } from '../screens/Social/';
-import { Ionicons } from '@expo/vector-icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
-import DoctorSchedule from '../screens/Schedule/ScheduleDoctor';
-import HealthProfile from '../screens/User/HealthProfile';
-import EditProfile from '../screens/User/EditProfile';
-import DoctorAppointment from '../screens/Schedule/DoctorAppointment';
-import BookingScreen from '../screens/Schedule/BookingScreen';
+} from "@react-navigation/stack";
+import Authentication from "./Authentication";
+import { Home, Test } from "../screens/Home";
+import { HomeUser } from "../screens/User/";
+import { HomeNofication } from "../screens/Nofication/";
+import { HomeSocial } from "../screens/Social/";
+import { Ionicons } from "@expo/vector-icons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MedicalSchedule from "../screens/Schedule/MedicalSchedule";
+import DoctorSchedule from "../screens/Schedule/ScheduleDoctor";
+import HealthProfile from "../screens/User/HealthProfile";
+import EditProfile from "../screens/User/EditProfile";
+import HealthReport from "../screens/User/HealthReport";
+import DoctorAppointment from "../screens/Schedule/DoctorAppointment";;
+import BookingScreen from "../screens/Schedule/BookingScreen";
 
 const HomeScreen = () => {
   const { user } = useContext(AuthContext);
@@ -123,6 +124,13 @@ const InfoScreen = () => {
           headerShown: false, // Ẩn header mặc định
         }}
       />
+
+      {/* Thêm màn hình HealthReport */}
+      <InfoStack.Screen
+        name="HealthReport"
+        component={HealthReport}
+        options={{ headerShown: false }} // Tùy chọn ẩn header nếu cần
+      />
     </InfoStack.Navigator>
   );
 };
@@ -131,7 +139,7 @@ const HcsNavigator = () => {
   const BottomNavigator = createBottomTabNavigator();
   return (
     <BottomNavigator.Navigator
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: '#3CB371' }}
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: "#3CB371" }}
     >
       <BottomNavigator.Screen
         name="Trang chủ"
