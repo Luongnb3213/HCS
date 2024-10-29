@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 const NotificationItem = ({ item }) => {
+  const navigation = useNavigation();
   const title = {
       APPOINTMENT: "APPOINTMENT",
       MEDICATION: "MEDICATION",
@@ -12,7 +13,9 @@ const NotificationItem = ({ item }) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
   const formattedDate = date.toLocaleDateString('en-US', options);
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity onPress={() => {
+      navigation.navigate('medicalSchedule')
+    }} style={styles.container}>
       <View style={styles.iconContainer}>
         <View style={styles.icon}>
           <Text style={styles.iconText}>{item.user.username.charAt(0)}</Text>

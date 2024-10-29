@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
 
-const Input = ({ text, setText, placeholder, Icon, iconName, iconSize }) => {
+const Input = ({ text, setText, placeholder, Icon, iconName, iconSize,secureTextEntry = false }) => {
   return (
     <View className="flex gap-3 flex-row py-2 border-b  ml-2 mb-4 border-b-stone-200">
       <Icon name={iconName} size={iconSize} color="black" />
@@ -11,6 +11,7 @@ const Input = ({ text, setText, placeholder, Icon, iconName, iconSize }) => {
         style={styles.input}
         value={text}
         placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );

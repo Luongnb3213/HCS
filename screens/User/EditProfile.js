@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import {
   View,
   Text,
@@ -11,10 +11,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import apiClient from "../../api/apiClient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AuthContext from '../../constants/AuthContext';
+
+
 
 const EditProfile = () => {
+  const getUserToken = () => {
+    const { user } = useContext(AuthContext);
+    return user?.id;
+  };
   const [user, setUser] = useState(null);
-  const userId = 1;
+  const userId = getUserToken(); 
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -29,7 +36,7 @@ const EditProfile = () => {
     fetchUser();
   }, []);
 
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState("https://w7.pngwing.com/pngs/177/551/png-transparent-user-interface-design-computer-icons-default-stephen-salazar-graphy-user-interface-design-computer-wallpaper-sphere-thumbnail.png");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("Nam");

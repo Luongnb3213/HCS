@@ -152,7 +152,9 @@ const Home = ({ navigation }) => {
               <Text className="text-gray-700 text-sm mt-2">Lịch hẹn</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/3 p-2 items-center">
+            <TouchableOpacity  onPress={() => {
+                navigation.navigate('Socail');
+              }} className="w-1/3 p-2 items-center">
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/7757/7757793.png',
@@ -164,7 +166,12 @@ const Home = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/3 p-2 items-center">
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('medication');
+              }}
+              className="w-1/3 p-2 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/843/843169.png',
@@ -173,6 +180,22 @@ const Home = ({ navigation }) => {
               />
               <Text className="text-gray-700 text-sm mt-2">
                 Nhắc lịch uống thuốc
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('hospitalMap');
+              }}
+              className="w-1/3 p-2 items-center"
+            >
+              <Image
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/843/843169.png',
+                }}
+                className="w-12 h-12"
+              />
+              <Text className="text-gray-700 text-sm mt-2">
+              Map
               </Text>
             </TouchableOpacity>
           </View>

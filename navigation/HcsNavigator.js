@@ -1,26 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 import AuthContext from '../constants/AuthContext';
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
   CardStyleInterpolators,
-} from "@react-navigation/stack";
-import Authentication from "./Authentication";
-import { Home, Test } from "../screens/Home";
-import { HomeUser } from "../screens/User/";
-import { HomeNofication } from "../screens/Nofication/";
-import { HomeSocial } from "../screens/Social/";
-import { Ionicons } from "@expo/vector-icons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import MedicalSchedule from "../screens/Schedule/MedicalSchedule";
-import DoctorSchedule from "../screens/Schedule/ScheduleDoctor";
-import HealthProfile from "../screens/User/HealthProfile";
-import EditProfile from "../screens/User/EditProfile";
-import HealthReport from "../screens/User/HealthReport";
-import DoctorAppointment from "../screens/Schedule/DoctorAppointment";;
-import BookingScreen from "../screens/Schedule/BookingScreen";
-
+} from '@react-navigation/stack';
+import Authentication from './Authentication';
+import { Home, Test } from '../screens/Home';
+import { HomeUser } from '../screens/User/';
+import { HomeNofication } from '../screens/Nofication/';
+import { HomeSocial } from '../screens/Social/';
+import { Ionicons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import MedicalSchedule from '../screens/Schedule/MedicalSchedule';
+import DoctorSchedule from '../screens/Schedule/ScheduleDoctor';
+import HealthProfile from '../screens/User/HealthProfile';
+import EditProfile from '../screens/User/EditProfile';
+import HealthReport from '../screens/User/HealthReport';
+import DoctorAppointment from '../screens/Schedule/DoctorAppointment';
+import BookingScreen from '../screens/Schedule/BookingScreen';
+import HospitalList from '../screens/Hospital/HospitalList';
+import PostList from '../screens/Post/PostList';
+import PostDetail from '../screens/Post/PostDetail';
+import Medical from '../screens/Schedule/Medical';
+import HospitalMap from '../screens/Hospital/HospitalMap';
 const HomeScreen = () => {
   const { user } = useContext(AuthContext);
   const HomeStack = createStackNavigator();
@@ -56,6 +60,9 @@ const HomeScreen = () => {
               name="doctorappointment"
               component={DoctorAppointment}
             />
+            <HomeStack.Screen name="medication" component={Medical} />
+            <HomeStack.Screen name="hospitalMap" component={HospitalList} />
+
           </>
         ) : (
           <>
@@ -94,7 +101,8 @@ const SocailScreen = () => {
   const SocialStack = createStackNavigator();
   return (
     <SocialStack.Navigator screenOptions={{ headerShown: false }}>
-      <SocialStack.Screen name="Socail" component={HomeSocial} />
+      <SocialStack.Screen name="Socail" component={PostList} />
+      <SocialStack.Screen name="PostDetail" component={PostDetail} />
     </SocialStack.Navigator>
   );
 };
@@ -102,7 +110,7 @@ const SocailScreen = () => {
 const InfoScreen = () => {
   const InfoStack = createStackNavigator();
   return (
-    <InfoStack.Navigator>
+    <InfoStack.Navigator initialRouteName="Info">
       {/* Màn hình User không có header */}
       <InfoStack.Screen
         name="Info"
@@ -131,6 +139,7 @@ const InfoScreen = () => {
         component={HealthReport}
         options={{ headerShown: false }} // Tùy chọn ẩn header nếu cần
       />
+      <InfoStack.Screen options={{ headerShown: false }}  name="Authentication" component={Authentication} />
     </InfoStack.Navigator>
   );
 };
@@ -139,7 +148,7 @@ const HcsNavigator = () => {
   const BottomNavigator = createBottomTabNavigator();
   return (
     <BottomNavigator.Navigator
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: "#3CB371" }}
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: '#3CB371' }}
     >
       <BottomNavigator.Screen
         name="Trang chủ"

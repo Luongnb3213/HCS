@@ -23,7 +23,11 @@ const Login = ({ navigation }) => {
       setToken(response.data.accessToken);
       AsyncStorage.setItem('token', response.data.accessToken)
       AsyncStorage.setItem('refreshToken', response.data.refreshToken)
-      navigation.navigate('Home');
+      // navigation.navigate('Home');
+      navigation.reset({
+        index: 0, // Đặt màn hình đầu tiên trong ngăn xếp
+        routes: [{ name: 'Info' }],
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -53,6 +57,7 @@ const Login = ({ navigation }) => {
           Icon={Ionicons}
           iconName="lock-closed-sharp"
           iconSize={28}
+          secureTextEntry={true}
         />
       </View>
       <Button

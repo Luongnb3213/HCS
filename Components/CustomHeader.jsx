@@ -10,7 +10,7 @@ const CustomHeader = ({ navigate, title }) => {
       </TouchableOpacity>
 
       <Text className="text-2xl flex-1 text-center font-medium  text-white">
-        {title}{' '}
+        {title}
       </Text>
     </View>
   );

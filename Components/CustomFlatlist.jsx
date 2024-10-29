@@ -42,10 +42,11 @@ const CustomFlatlist = ({
       const response = await callApi({
         skip: type == 'loadMore' ? data?.length : 0,
         limit: limit,
-      });
+      })
+     
       await new Promise((resolve) => setTimeout(resolve, 1000));
       isLoading.current = false;
-      if (response?.length < limit) {
+      if (response?.length == 0 ) {
         isStop.current = true;
       }
       if (type == 'refresh') {
@@ -84,8 +85,10 @@ const CustomFlatlist = ({
         data={data}
         keyExtractor={(item, idx) => idx + ''}
         renderItem={renderItem}
-        onEndReachedThreshold={0.3}
-        onEndReached={() => getData('loadMore')}
+        onEndReachedThreshold={0.1}
+        onEndReached={() => {
+          getData('loadMore')
+        } }
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         refreshControl={

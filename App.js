@@ -28,7 +28,6 @@ export default function App() {
     getToken();
   }, []);
 
-  console.log(token); // Token sẽ được log đúng sau khi được lấy từ AsyncStorage
 
   return (
     <AuthContext.Provider value={{ user, setUser, setToken }}>
