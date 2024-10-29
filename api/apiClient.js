@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext from '../constants/AuthContext';
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.100.181',
+  baseURL: 'http://192.168.0.102:5000',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
