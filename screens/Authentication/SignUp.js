@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, Button, Alert } from 'react-native';
+import { Text, TouchableOpacity, View, Button, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Input from '../../Components/Input';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -18,6 +18,7 @@ const SignUp = ({ navigation }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Thêm state để quản lý trạng thái loading
 
   const validate = () => {
     const newErrors = {};
@@ -45,6 +46,7 @@ const SignUp = ({ navigation }) => {
 
   const handleSignUp = async () => {
     if (validate()) {
+      setLoading(true); // Bật trạng thái loading
       try {
         const response = await apiClient.post('/auth/signup', {
           username: formData.username,
@@ -53,12 +55,15 @@ const SignUp = ({ navigation }) => {
           password: formData.password,
           gender: formData.gender,
         });
-        if (response.userCreate) {
+
+        if (response.data.userCreate) {
           navigation.navigate('Login');
         }
       } catch (error) {
         console.error('Lỗi đăng ký:', error);
         Alert.alert('Đăng ký thất bại', 'Vui lòng thử lại.');
+      } finally {
+        setLoading(false); // Tắt trạng thái loading sau khi hoàn tất
       }
     }
   };
@@ -149,8 +154,13 @@ const SignUp = ({ navigation }) => {
       <TouchableOpacity
         onPress={handleSignUp}
         className="bg-green-500 p-4 rounded"
+        disabled={loading} // Vô hiệu hóa nút khi đang loading
       >
-        <Text className="text-white text-center font-bold">Đăng ký</Text>
+        {loading ? (
+          <ActivityIndicator color="#fff" /> // Hiển thị vòng tròn loading
+        ) : (
+          <Text className="text-white text-center font-bold">Đăng ký</Text>
+        )}
       </TouchableOpacity>
 
       <View>

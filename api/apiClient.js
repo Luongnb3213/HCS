@@ -30,37 +30,37 @@ const apiClient = axios.create({
 //     (error) => Promise.reject(error)
 // );
 
-apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const { response } = error;
-    if (response && response.status === 403) {
-      try {
-        const refreshToken = await AsyncStorage.getItem('refreshToken');
-        if (refreshToken) {
-          const res = await axios.post('http://192.168.100.181/auth/token', {
-            refreshToken: refreshToken,
-          });
-          const newToken = res.data.token;
-          await AsyncStorage.setItem('token', newToken);
-          handleLoginWithNewToken(newToken);
-          error.config.headers.Authorization = `Bearer ${newToken}`;
-          return apiClient(error.config);
-        } else {
-          console.log('Refresh token hết hạn');
-          await handleLogout();
-        }
-      } catch (refreshError) {
-        console.log('Lỗi làm mới token:', refreshError);
-        await handleLogout();
-      }
-    }
+// apiClient.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   async (error) => {
+//     const { response } = error;
+//     if (response && response.status === 403) {
+//       try {
+//         const refreshToken = await AsyncStorage.getItem('refreshToken');
+//         if (refreshToken) {
+//           const res = await axios.post('http://192.168.100.181/auth/token', {
+//             refreshToken: refreshToken,
+//           });
+//           const newToken = res.data.token;
+//           await AsyncStorage.setItem('token', newToken);
+//           handleLoginWithNewToken(newToken);
+//           error.config.headers.Authorization = `Bearer ${newToken}`;
+//           return apiClient(error.config);
+//         } else {
+//           console.log('Refresh token hết hạn');
+//           await handleLogout();
+//         }
+//       } catch (refreshError) {
+//         console.log('Lỗi làm mới token:', refreshError);
+//         await handleLogout();
+//       }
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 
 const handleLogout = async () => {
   await AsyncStorage.removeItem('token');

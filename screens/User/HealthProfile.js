@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import {
   View,
   Text,
@@ -12,11 +12,16 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import apiClient from "../../api/apiClient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AuthContext from '../../constants/AuthContext';
 
 const HealthProfile = () => {
+  const getUserToken = () => {
+    const { user } = useContext(AuthContext);
+    return user?.id;
+  };
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const userId = 1; // Placeholder
+  const userId = getUserToken(); // Placeholder
 
   useEffect(() => {
     const fetchUser = async () => {

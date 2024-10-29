@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -6,21 +6,27 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-} from "react-native";
-import apiClient from "../../api/apiClient";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native';
+import apiClient from '../../api/apiClient';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthContext from '../../constants/AuthContext';
 
 const HomeUser = ({ navigation }) => {
+  const getUserToken = () => {
+    const { user } = useContext(AuthContext);
+    return user?.id;
+  };
   const [user, setUser] = useState(null);
-  const userId = 1;
+  const userId = getUserToken();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await apiClient.get(`/users/${userId}`);
+        console.log(user);
         setUser(response.data);
       } catch (error) {
-        console.log("Error fetching user data:", error);
+        console.log('Error fetching user data:', error);
       }
     };
     fetchUser();
@@ -42,7 +48,7 @@ const HomeUser = ({ navigation }) => {
           )}
           <TouchableOpacity
             className="bg-green-500 px-5 py-2 rounded-full"
-            onPress={() => navigation.navigate("EditProfile")}
+            onPress={() => navigation.navigate('EditProfile')}
           >
             <Text className="text-white font-bold">Cập nhật</Text>
           </TouchableOpacity>
@@ -79,7 +85,7 @@ const HomeUser = ({ navigation }) => {
             <TouchableOpacity className="w-1/4 items-center">
               <Image
                 source={{
-                  uri: "https://cdn-icons-png.flaticon.com/512/3658/3658154.png"
+                  uri: 'https://cdn-icons-png.flaticon.com/512/3658/3658154.png',
                 }}
                 className="w-12 h-12 mb-2"
               />
@@ -88,7 +94,7 @@ const HomeUser = ({ navigation }) => {
             <TouchableOpacity className="w-1/4 items-center">
               <Image
                 source={{
-                    uri: "https://cdn-icons-png.flaticon.com/512/2454/2454212.png"
+                  uri: 'https://cdn-icons-png.flaticon.com/512/2454/2454212.png',
                 }}
                 className="w-12 h-12 mb-2"
               />
@@ -103,7 +109,7 @@ const HomeUser = ({ navigation }) => {
             <TouchableOpacity className="w-1/4 items-center">
               <Image
                 source={{
-                  uri: "https://cdn-icons-png.flaticon.com/512/7284/7284037.png",
+                  uri: 'https://cdn-icons-png.flaticon.com/512/7284/7284037.png',
                 }}
                 className="w-12 h-12 mb-2"
               />
@@ -112,19 +118,19 @@ const HomeUser = ({ navigation }) => {
             <TouchableOpacity className="w-1/4 items-center">
               <Image
                 source={{
-                    uri: "https://cdn-icons-png.flaticon.com/512/4320/4320337.png",
-                  }}
+                  uri: 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png',
+                }}
                 className="w-12 h-12 mb-2"
               />
               <Text className="text-center text-sm">Đơn hàng</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="w-1/4 items-center"
-              onPress={() => navigation.navigate("HealthProfile")}
+              onPress={() => navigation.navigate('HealthProfile')}
             >
               <Image
                 source={{
-                    uri: "https://cdn-icons-png.flaticon.com/512/2221/2221950.png",
+                  uri: 'https://cdn-icons-png.flaticon.com/512/2221/2221950.png',
                 }}
                 className="w-12 h-12 mb-2"
               />
@@ -133,7 +139,7 @@ const HomeUser = ({ navigation }) => {
             <TouchableOpacity className="w-1/4 items-center">
               <Image
                 source={{
-                    uri: "https://cdn-icons-png.flaticon.com/512/7757/7757793.png"
+                  uri: 'https://cdn-icons-png.flaticon.com/512/7757/7757793.png',
                 }}
                 className="w-12 h-12 mb-2"
               />
@@ -146,7 +152,12 @@ const HomeUser = ({ navigation }) => {
           <TouchableOpacity className="py-4 border-b border-gray-200">
             <Text className="text-lg">Thiết lập ứng dụng</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="py-4 border-b border-gray-200">
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Authentication');
+            }}
+            className="py-4 border-b border-gray-200"
+          >
             <Text className="text-lg">Tài khoản</Text>
           </TouchableOpacity>
           <TouchableOpacity className="py-4 border-b border-gray-200">

@@ -151,7 +151,7 @@ const DoctorSchedule = ({ navigation }) => {
       <View className="px-4 mt-4">
         <Calendar setDate={setDate} date={date} />
       </View>
-      <View className="px-4 mb-20 mt-4">
+      <View className="px-4 mb-40 mt-4 ">
         <CustomFlatlist
           limit={5}
           callApi={callApi}
