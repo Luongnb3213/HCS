@@ -28,6 +28,7 @@ export default function App() {
     getToken();
   }, []);
 
+  console.log(token); // Token sẽ được log đúng sau khi được lấy từ AsyncStorage
 
   return (
     <AuthContext.Provider value={{ user, setUser, setToken }}>
@@ -36,7 +37,7 @@ export default function App() {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={true}
+          visible={false}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
             setModalVisible(!modalVisible);
@@ -102,3 +103,86 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+// import React from "react";
+// import { View, Button, Alert } from "react-native";
+// import * as XLSX from "xlsx";
+// import * as DocumentPicker from "expo-document-picker";
+// import axios from "axios";
+// import apiClient from "./api/apiClient";
+
+// const App = () => {
+//   const saveDataToDatabase = async (data) => {
+//     try {
+//       const response = await apiClient.post(`/hospitals/`, data);
+//       if (response.status === 200) {
+//         Alert.alert("Thành công", "Dữ liệu đã được lưu vào database.");
+//       } else {
+//         Alert.alert("Lỗi", "Không thể lưu dữ liệu vào database.");
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       Alert.alert("Lỗi", "Đã xảy ra lỗi khi lưu dữ liệu vào database.");
+//     }
+//   };
+
+//   const readExcel = async (fileUri) => {
+//     const response = await fetch(fileUri);
+//     const blob = await response.blob();
+
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//       const arrayBuffer = e.target.result;
+//       const workbook = XLSX.read(arrayBuffer, { type: "array" });
+//       const sheetName = workbook.SheetNames[0];
+//       const sheet = workbook.Sheets[sheetName];
+//       const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+//       const convertKeysToLowerCase = (data) => {
+//         return data.map((item) => {
+//           return Object.entries(item).reduce((acc, [key, value]) => {
+//             acc[key.toLowerCase()] = value;
+//             return acc;
+//           }, {});
+//         });
+//       };
+
+//       const transformedData = convertKeysToLowerCase(jsonData);
+
+//       if (transformedData.length > 0) {
+//         // Gọi API để lưu dữ liệu vào database
+//         console.log(transformedData);
+//         saveDataToDatabase(transformedData);
+//       } else {
+//         Alert.alert("Thông báo", "Không có dữ liệu trong file Excel.");
+//       }
+//     };
+//     reader.readAsArrayBuffer(blob);
+//   };
+
+//   const handleUpload = async () => {
+//     try {
+//       const res = await DocumentPicker.getDocumentAsync({
+//         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+//       });
+
+//       if (!res.canceled) {
+//         const fileUri = res.assets[0].uri;
+//         await readExcel(fileUri);
+//       } else {
+//         Alert.alert("Thông báo", "Bạn đã hủy việc chọn file.");
+//       }
+//     } catch (err) {
+//       console.error(err);
+//       Alert.alert("Lỗi", "Đã xảy ra lỗi khi chọn file.");
+//     }
+//   };
+
+//   return (
+//     <View style={{ flex: 1, padding: 20 }}>
+//       <Button title="Tải File" onPress={handleUpload} />
+//     </View>
+//   );
+// };
+
+// export default App;

@@ -17,7 +17,7 @@ const HomeUser = ({ navigation }) => {
     return user?.id;
   };
   const [user, setUser] = useState(null);
-  const userId = getUserToken();
+  const userId = 1;
 
   useEffect(() => {
     const fetchUser = async () => {

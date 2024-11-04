@@ -21,7 +21,7 @@ const HealthProfile = () => {
   };
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const userId = getUserToken(); // Placeholder
+  const userId = 1; // Placeholder
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -60,10 +60,9 @@ const HealthProfile = () => {
               <View className="ml-4">
                 <Text className="text-base font-bold">{user.fullName}</Text>
                 <Text className="text-sm text-gray-600">
-                  0 Lần khám | 0 Thành viên | BMI --
+                  1 Lần khám 
                 </Text>
               </View>
-              <Button title="Refresh" onPress={() => {}} />
             </>
           )}
         </View>
@@ -84,7 +83,7 @@ const HealthProfile = () => {
         </View> */}
 
         {/* No Health Record Section */}
-        <View className="items-center py-6">
+        {/* <View className="items-center py-6">
           <Image
             source={{
               uri: "https://www.shutterstock.com/shutterstock/photos/1379987435/display_1500/stock-vector-data-not-found-icon-1379987435.jpg",
@@ -94,7 +93,7 @@ const HealthProfile = () => {
           <Text className="text-base text-gray-500">
             Không có hồ sơ sức khỏe
           </Text>
-        </View>
+        </View> */}
 
         <View className="px-4 py-2">
           {user && (
@@ -118,7 +117,7 @@ const HealthProfile = () => {
                 </View>
               </TouchableOpacity>
 
-              <Text className="font-bold text-lg">Tháng 06/2024</Text>
+              {/* <Text className="font-bold text-lg">Tháng 06/2024</Text>
               <TouchableOpacity
                 className="rounded-lg shadow bg-white p-4 mt-2 mb-2 flex-row"
                 onPress={() => navigation.navigate("HealthReport")}
@@ -135,7 +134,7 @@ const HealthProfile = () => {
                     Mã HS: 2406041525
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </>
           )}
         </View>
