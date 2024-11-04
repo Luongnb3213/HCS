@@ -16,15 +16,13 @@ const Appointment = ({ item }) => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleCancel = () => {
-    setIsLoading(true); // Hiển thị loading khi bắt đầu hủy
-    // Giả lập hành động hủy với thời gian chờ (giống như gọi API)
+    setIsLoading(true);
+
     setTimeout(() => {
-      // Thực hiện logic hủy cuộc hẹn (gọi API hoặc xóa khỏi danh sách)
-      console.log('Appointment cancelled');
-      setIsCancelled(true); // Đặt trạng thái là hủy và ẩn component
-      setIsLoading(false); // Tắt loading
-      setConfirmModalVisible(false); // Đóng Modal
-    }, 2000); // Giả lập thời gian hủy là 2 giây
+      setIsCancelled(true);
+      setIsLoading(false);
+      setConfirmModalVisible(false);
+    }, 2000);
   };
 
   if (isCancelled) {
@@ -47,19 +45,19 @@ const Appointment = ({ item }) => {
     <View className="mb-3">
       <View className={`mb-5`}>
         <Text className={`text-lg font-bold text-blue-500 mb-2`}>
-          <Icon name="calendar-check-o" size={20} color="#007bff" /> Appointment
-          Information
+          <Icon name="calendar-check-o" size={20} color="#007bff" /> 
+          Thông tin cuộc hẹn
         </Text>
         <Text className={`text-sm text-gray-600 mb-1`}>
-          <Icon name="clock-o" size={16} color="#666" /> Date:{' '}
+          <Icon name="clock-o" size={16} color="#666" /> Thời gian:{' '}
           {new Date(item.appointmentDate).toLocaleDateString()}
         </Text>
         <Text className={`text-sm text-gray-600 mb-1`}>
-          <Icon name="clock-o" size={16} color="#666" /> Time:{' '}
+          <Icon name="clock-o" size={16} color="#666" /> Giờ:{' '}
           {new Date(item.appointmentDate).toLocaleTimeString()}
         </Text>
         <Text className={`text-sm text-gray-600 mb-1`}>
-          <Icon name="heartbeat" size={16} color="#666" /> Reason: {item.reason}
+          <Icon name="heartbeat" size={16} color="#666" /> Lý do: {item.reason}
         </Text>
         <Text className={`text-sm font-bold text-black mb-1`}>
           <Icon
@@ -68,7 +66,7 @@ const Appointment = ({ item }) => {
             className="mr-1"
             color={item.status === 'CONFIRMED' ? '#28a745' : '#dc3545'}
           />
-          Status: {item.status}
+          Trạng thái: {item.status}
         </Text>
       </View>
       <View className="flex flex-row gap-3">
@@ -86,7 +84,7 @@ const Appointment = ({ item }) => {
           >
             <Icon name="times-circle" size={16} color="#fff" />
             <Text className={`text-white font-bold ml-2`}>
-              Cancel Appointment
+              Huỷ Cuộc hẹn
             </Text>
           </TouchableOpacity>
         </View>
@@ -101,10 +99,10 @@ const Appointment = ({ item }) => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
             <Text className={`text-lg font-bold text-gray-800 mb-4`}>
-              Confirm Cancellation
+              Xác nhận huỷ
             </Text>
             <Text className={`text-sm text-gray-600 mb-4`}>
-              Are you sure you want to cancel this appointment?
+            Bạn có chắc chắn muốn hủy cuộc hẹn này không?
             </Text>
 
             {/* Nút xác nhận hủy */}
@@ -119,7 +117,7 @@ const Appointment = ({ item }) => {
                 <>
                   <Icon name="times-circle" size={16} color="#fff" />
                   <Text className={`text-white font-bold ml-2`}>
-                    Yes, Cancel
+                  Có, Hủy
                   </Text>
                 </>
               )}
@@ -133,7 +131,7 @@ const Appointment = ({ item }) => {
             >
               <Icon name="times-circle" size={16} color="#666" />
               <Text className={`text-gray-800 font-bold ml-2`}>
-                No, Go Back
+              Không, quay lại
               </Text>
             </TouchableOpacity>
           </View>
@@ -163,11 +161,11 @@ const Appointment = ({ item }) => {
               </Text>
             </TouchableOpacity>
             <Text className={`text-sm text-gray-600 mb-1`}>
-              <Icon name="graduation-cap" size={16} color="#666" /> Experience:{' '}
+              <Icon name="graduation-cap" size={16} color="#666" /> Kinh nghiệm:{' '}
               {item.doctor.experienceYears} years
             </Text>
             <Text className={`text-sm text-gray-600 mb-1`}>
-              <Icon name="star" size={16} color="#f8d825" /> Rating:{' '}
+              <Icon name="star" size={16} color="#f8d825" /> Đánh giá:{' '}
               {item.doctor.rating} ★
             </Text>
 
@@ -176,7 +174,7 @@ const Appointment = ({ item }) => {
               onPress={() => setModalVisible(false)} // Đóng modal khi bấm nút
             >
               <Icon name="times-circle" size={16} color="#fff" />
-              <Text className={`text-white font-bold ml-2`}>Close</Text>
+              <Text className={`text-white font-bold ml-2`}>Đóng</Text>
             </TouchableOpacity>
           </View>
         </View>
