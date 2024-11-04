@@ -1,57 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
-  Button,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
   FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { 
+  tabData, 
+  dtData, 
+  kqkData, 
+  cdhaData, 
+  examTitle,
+  examDate,
+  examId, 
+  prescriptionTitle 
+} from "./data";
+import AuthContext from '../../constants/AuthContext';
+
 
 const HealthReport = () => {
+  const getUserToken = () => {
+    const { user } = useContext(AuthContext);
+    return user?.id;
+  };
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
+  const userId = 1; // Placeholder
 
-  // State to track the active tab
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await apiClient.get(`/users/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
   const [activeTab, setActiveTab] = useState("Kết quả khám");
 
-  // Data for each tab
-  const reportData = {
-    "Kết quả khám": {
-      // consultationType: "Khám Y học cổ truyền [PK]",
-      preliminaryDiagnosis: "Đau lưng",
-      finalDiagnosis: "M54 - Đau lưng",
-      advice: "Tập thể dục theo hướng dẫn",
-      location: "PK Y học cổ truyền",
-      doctor: "Vũ Việt Hằng",
-    },
-    "Kết quả CDHA": {
-      // consultationType: "Chẩn đoán hình ảnh [CDHA]",
-      preliminaryDiagnosis: "Không rõ",
-      finalDiagnosis: "Chưa xác định",
-      advice: "Cần thêm xét nghiệm",
-      location: "Khoa Chẩn đoán hình ảnh",
-      doctor: "Trần Văn Hùng",
-    },
-    "Đơn thuốc": {
-      // consultationType: "Đơn thuốc",
-      preliminaryDiagnosis: "Đau lưng mãn tính",
-      finalDiagnosis: "M54 - Đau lưng mãn tính",
-      advice: "Uống thuốc theo chỉ dẫn",
-      location: "PK Y học cổ truyền",
-      doctor: "Nguyễn Thị Lan",
-    },
-  };
-
-  const tabData = [
-    { id: "1", title: "Kết quả khám" },
-    { id: "2", title: "Kết quả CDHA và thăm dò chức năng" },
-    { id: "3", title: "Đơn thuốc" },
-  ];
-
-  // Function to handle tab change
   const handleTabPress = (tab) => {
     setActiveTab(tab);
   };
@@ -74,13 +67,16 @@ const HealthReport = () => {
           </View>
 
           {/* Info */}
-          <View className="px-4 py-2 flex-row">
-            <View className="justify-between">
-              <Text className="font-bold text-lg">Ngày khám: 04/06/2024</Text>
-              <Text className="italic text-lg text-blue-500">
-                Mã HS: 2406041525
+          <View className="px-4 py-2">
+            <Text className="font-bold text-lg">Ngày khám: {examDate}</Text>
+            <Text className="italic text-lg text-blue-500">
+              Mã HS: {examId}
+            </Text>
+            {/* <TouchableOpacity className="right-4">
+              <Text className="text-black rounded-lg bg-gray-100 text-base">
+                Kết quả ký số
               </Text>
-            </View>
+            </TouchableOpacity> */}
           </View>
 
           {/* Tabs */}
@@ -90,9 +86,7 @@ const HealthReport = () => {
               <TouchableOpacity
                 onPress={() => handleTabPress(item.title)}
                 className={`px-4 py-2 border-b-2 ${
-                  activeTab === item.title
-                    ? "border-green-600"
-                    : "border-transparent"
+                  activeTab === item.title ? "border-green-600" : "border-transparent"
                 }`}
               >
                 <Text
@@ -109,50 +103,98 @@ const HealthReport = () => {
             showsHorizontalScrollIndicator={false}
           />
 
-          {/* Consultation Details based on activeTab */}
-          <View className="bg-gray-100 p-4 mt-4 rounded-lg mx-4">
-            {/* <View className="flex-row justify-between pb-4">
-              <Text>{reportData[activeTab].consultationType}</Text>
-            </View> */}
-            <View className="flex-row justify-between mb-3">
-              <Text className="text-base">Chuẩn đoán sơ bộ:</Text>
-              <Text className="text-base">Đau lưng</Text>
-            </View>
-            <View className="flex-row justify-between mb-3">
-              <Text className="text-base">Chuẩn đoán bệnh:</Text>
-              <Text className="text-base">M54 - Đau lưng</Text>
-            </View>
-            <View className="flex-row justify-between mb-3">
-              <Text className="text-base">Lời dặn:</Text>
-              <Text className="text-base text-right">
-                Tập thể dục theo hướng dẫn
+          {/* Content based on activeTab */}
+          {activeTab === "Kết quả khám" && (
+            <View>
+              <Text className="text-lg font-bold mx-4 mb-3 mt-6">
+                {examTitle}
               </Text>
+              <View className="bg-gray-100 px-4 pt-2 rounded-lg mx-4">
+                {kqkData.map((item, index) => (
+                  <View className="flex-row mb-3" key={index}>
+                    <Text className="text-lg w-2/3">{item.label}</Text>
+                    <Text className="text-lg w-1/3 text-right">{item.value}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
-            <View className="flex-row justify-between mb-3">
-              <Text className="text-base">Nơi thực hiện:</Text>
-              <Text className="text-base">PK Y học cổ truyền</Text>
+          )}
+
+          {activeTab === "Kết quả CDHA và thăm dò chức năng" && (
+            <View className="bg-gray-100 px-4 py-2 rounded-lg mx-4 mt-6">
+              {cdhaData.map((item, index) => (
+                <View key={index} className="mb-4">
+                  <TouchableOpacity className="border-b border-gray-300 pb-2 flex-row items-center justify-between">
+                    <Text className="text-lg font-bold">{item.title}</Text>
+                  </TouchableOpacity>
+                  <View className="pt-2">
+                    <Text className="text-base font-bold">KỸ THUẬT:</Text>
+                    <Text className="text-base ml-4">{item.technique}</Text>
+                    <Text className="text-base font-bold">MÔ TẢ:</Text>
+                    {item.description.map((desc, i) => (
+                      <Text key={i} className="text-base ml-4">{desc}</Text>
+                    ))}
+                    <Text className="text-base font-bold">KẾT LUẬN:</Text>
+                    <Text className="text-base ml-4">{item.conclusion}</Text>
+                  </View>
+                </View>
+              ))}
             </View>
-            <View className="flex-row justify-between">
-              <Text className="text-base">Bác sĩ:</Text>
-              <Text className="text-base">Vũ Việt Hằng</Text>
+          )}
+
+          {activeTab === "Đơn thuốc" && (
+            <View>
+              <Text className="text-lg font-bold mx-4 mb-3 mt-6">
+                {prescriptionTitle}
+              </Text>
+              <View className="bg-gray-100 px-4 pt-2 rounded-lg mx-4">
+                <View className="flex-row">
+                  <Text className="w-1/6 font-bold text-lg text-left">STT</Text>
+                  <Text className="w-3/6 font-bold text-lg text-left">
+                    Tên thuốc
+                  </Text>
+                  <Text className="w-2/6 font-bold text-lg text-right">
+                    Số lượng
+                  </Text>
+                </View>
+                {dtData.map((item, index) => (
+                  <View
+                    key={item.id}
+                    className={`flex-row ${
+                      index === dtData.length - 1 ? "" : "border-b"
+                    } border-gray-300 py-2`}
+                  >
+                    <View className="w-1/6 justify-center items-center pr-7">
+                      <Text className="font-bold text-base">{item.id}</Text>
+                    </View>
+                    <View className="w-3/6 px-1">
+                      <Text className="font-bold text-left text-lg">
+                        {item.name}
+                      </Text>
+                      <Text className="text-left text-base">{item.dosage}</Text>
+                    </View>
+                    <View className="w-2/6 justify-center">
+                      <Text className="text-right text-base">
+                        {item.quantity}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
             </View>
-          </View>
+          )}
         </ScrollView>
 
         {/* Footer Navigation */}
         <View className="p-4">
           <View className="flex-row justify-between">
-            <TouchableOpacity className="flex-row"
-              onPress={() => {}}
-            >
-              <Ionicons name="arrow-back" size={24}/>
-              <Text className="text-base">Xem lần khám cũ hơn</Text>
+            <TouchableOpacity className="flex-row" onPress={() => {}}>
+              <Ionicons name="arrow-back" size={24} />
+              <Text className="text-base ml-1">Xem lần khám cũ hơn</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="flex-row"
-              onPress={() => {}}
-            >
-              <Text className="text-base">Xem lần khám mới hơn</Text>
-              <Ionicons name="arrow-forward" size={24}/>
+            <TouchableOpacity className="flex-row" onPress={() => {}}>
+              <Text className="text-base mr-1">Xem lần khám mới hơn</Text>
+              <Ionicons name="arrow-forward" size={24} />
             </TouchableOpacity>
           </View>
         </View>
