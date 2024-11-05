@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import apiClient from "../../api/apiClient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AuthContext from '../../constants/AuthContext';
+import AuthContext from "../../constants/AuthContext";
+import { usersData } from "./data";
 
 const HealthProfile = () => {
   const getUserToken = () => {
@@ -21,7 +22,7 @@ const HealthProfile = () => {
   };
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const userId = 1; // Placeholder
+  const userId = getUserToken();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,119 +36,128 @@ const HealthProfile = () => {
     fetchUser();
   }, []);
 
+  const [userData, setUserData] = useState(usersData[userId]);
+
+  useEffect(() => {
+    // Chỉ thực hiện khi userId thay đổi hoặc khi component render lần đầu
+    if (usersData[userId]) {
+      setUserData(usersData[userId]);
+    } else {
+      setUserData(null); // Đảm bảo `userData` là null nếu không tìm thấy userId
+    }
+  }, [userId]);
+
+  function calculateAge(dob) {
+    const today = new Date();
+    const birthDate = new Date(dob);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+  
+    // Adjust age if the birth date has not yet occurred this year
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+  
+    return age;
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView className="flex-1 bg-gray-100">
-        {/* Custom Header */}
-        <View className="bg-green-500 flex-row justify-between items-center p-4">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text className="text-white text-lg font-bold">Hồ Sơ Sức Khỏe</Text>
-          <TouchableOpacity className="p-2" onPress={() => alert("Upload")}>
-            <Text className="text-white text-sm">Tải lên</Text>
-          </TouchableOpacity>
-        </View>
+      {/* Custom Header */}
+      <View className="bg-green-500 flex-row justify-between items-center p-4">
+        <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text className="text-white text-lg font-bold">Hồ Sơ Sức Khỏe</Text>
+        <TouchableOpacity className="p-2" onPress={() => alert("Upload")}>
+          <Text className="text-white text-sm">Tải lên</Text>
+        </TouchableOpacity>
+      </View>
 
-        {/* Profile Section */}
+      {/* Profile Section */}
+      {user != null && (
         <View className="flex-row items-center p-4 bg-white">
-          {user && (
-            <>
-              <Image
-                source={{ uri: user.profilePicture }}
-                className="w-16 h-16 rounded-full"
-              />
-              <View className="ml-4">
-                <Text className="text-base font-bold">{user.fullName}</Text>
-                <Text className="text-sm text-gray-600">
-                  1 Lần khám 
-                </Text>
-              </View>
-            </>
-          )}
+          <>
+            <Image
+              source={{ uri: user.profilePicture }}
+              className="w-20 h-20 rounded-full"
+            />
+            {/* Số lần khám */}
+            <View className="ml-4">
+              <Text className="text-xl font-bold mb-1">{user.fullName}</Text>
+              {/* <Text className="text-base mb-1">Bệnh viện Đại học Y Hà Nội</Text>
+              <Text className="text-base mb-1">Mã NB: 2406005292</Text> */}
+              <Text className="text-base mb-1">
+                {user.gender == "MALE" ? "Nam" : "Nữ"}, {calculateAge(user.dateOfBirth)} tuổi
+              </Text>
+              <Text className="text-base text-gray-600">
+                {userData
+                  ? `${userData.visitHistory.length} Lần khám`
+                  : "0 Lần khám"}
+              </Text>
+            </View>
+          </>
         </View>
-
-        {/* Family & Friends Health Profile */}
-        {/* <View className="p-4">
-          <Text className="text-base font-bold mb-2">
-            Hồ sơ sức khỏe người thân, bạn bè
-          </Text>
-          <View className="flex-row justify-between">
-            <TouchableOpacity className="items-center w-1/2">
-              <Text className="text-sm text-center">Bạn bè</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="items-center w-1/2">
-              <Text className="text-sm text-center">Thêm thành viên</Text>
-            </TouchableOpacity>
-          </View>
-        </View> */}
-
+      )}
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        className="flex-1 bg-gray-100"
+      >
         {/* No Health Record Section */}
-        {/* <View className="items-center py-6">
-          <Image
-            source={{
-              uri: "https://www.shutterstock.com/shutterstock/photos/1379987435/display_1500/stock-vector-data-not-found-icon-1379987435.jpg",
-            }}
-            className="w-32 h-32 rounded-full"
-          />
-          <Text className="text-base text-gray-500">
-            Không có hồ sơ sức khỏe
-          </Text>
-        </View> */}
+        {userData == null && (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Image
+              source={{
+                uri: "https://firebasestorage.googleapis.com/v0/b/mealstogo-b034d.appspot.com/o/images%2Fnot-found.png?alt=media&token=8a81ca81-321a-4ad6-b3f9-7573fdea6e17",
+              }}
+              className="w-40 h-40"
+            />
+            <Text className="text-lg text-gray-500">
+              Không có hồ sơ sức khỏe
+            </Text>
+          </View>
+        )}
 
-        <View className="px-4 py-2">
-          {user && (
+        {/* Lịch sử khám */}
+        {user != null && userData != null && (
+          <View className="p-4">
             <>
-              <Text className="font-bold text-lg">Tháng 09/2024</Text>
-              <TouchableOpacity
-                className="rounded-lg shadow bg-white p-4 mt-2 mb-2 flex-row"
-                onPress={() => navigation.navigate("HealthReport")}
-              >
-                <Image
-                  source={{ uri: user.profilePicture }}
-                  className="w-16 h-16 rounded-full"
-                />
-                <View className="ml-4 justify-between">
-                  <Text className="font-bold text-lg">
-                    Ngày khám: 10/09/2024
-                  </Text>
-                  <Text className="italic text-lg text-blue-500">
-                    Mã HS: 2409102677
-                  </Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* <Text className="font-bold text-lg">Tháng 06/2024</Text>
-              <TouchableOpacity
-                className="rounded-lg shadow bg-white p-4 mt-2 mb-2 flex-row"
-                onPress={() => navigation.navigate("HealthReport")}
-              >
-                <Image
-                  source={{ uri: user.profilePicture }}
-                  className="w-16 h-16 rounded-full"
-                />
-                <View className="ml-4 justify-between">
-                  <Text className="font-bold text-lg">
-                    Ngày khám: 04/06/2024
-                  </Text>
-                  <Text className="italic text-lg text-blue-500">
-                    Mã HS: 2406041525
-                  </Text>
-                </View>
-              </TouchableOpacity> */}
+              <Text className="font-bold text-lg">Lịch sử khám</Text>
+              {userData.visitHistory.map((visit, index) => (
+                <TouchableOpacity
+                  key={index}
+                  className="rounded-lg shadow bg-white p-4 mt-2 mb-2 flex-row"
+                  onPress={() => navigation.navigate("HealthReport")}
+                >
+                  <Image
+                    source={{ uri: user.profilePicture }}
+                    className="w-16 h-16 rounded-full"
+                  />
+                  <View className="ml-4 justify-between">
+                    <Text className="font-bold text-lg">
+                      Ngày khám: {visit.date}
+                    </Text>
+                    <Text className="italic text-lg text-green-500">
+                      Mã HS: {visit.examId}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
             </>
-          )}
-        </View>
+          </View>
+        )}
 
         {/* Options */}
-        <View className="p-4">
+        {/* <View className="p-4">
           <TouchableOpacity className="bg-green-500 p-4 rounded-full mb-2 items-center">
             <Text className="text-white text-base">Xem kết quả khám</Text>
           </TouchableOpacity>
           <TouchableOpacity className="bg-green-500 p-4 rounded-full items-center">
             <Text className="text-white text-base">Tải lên hồ sơ sức khỏe</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

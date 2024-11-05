@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -11,9 +11,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import apiClient from "../../api/apiClient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AuthContext from '../../constants/AuthContext';
-
-
+import AuthContext from "../../constants/AuthContext";
 
 const EditProfile = () => {
   const getUserToken = () => {
@@ -21,7 +19,7 @@ const EditProfile = () => {
     return user?.id;
   };
   const [user, setUser] = useState(null);
-  const userId = getUserToken(); 
+  const userId = getUserToken();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,7 +34,9 @@ const EditProfile = () => {
     fetchUser();
   }, []);
 
-  const [profilePicture, setProfilePicture] = useState("https://w7.pngwing.com/pngs/177/551/png-transparent-user-interface-design-computer-icons-default-stephen-salazar-graphy-user-interface-design-computer-wallpaper-sphere-thumbnail.png");
+  const [profilePicture, setProfilePicture] = useState(
+    "https://w7.pngwing.com/pngs/177/551/png-transparent-user-interface-design-computer-icons-default-stephen-salazar-graphy-user-interface-design-computer-wallpaper-sphere-thumbnail.png"
+  );
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("Nam");
@@ -95,17 +95,16 @@ const EditProfile = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View className="flex-row items-center justify-center bg-green-500 px-4 py-3 relative">
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          className="absolute left-4"
+        >
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text className="text-lg font-bold text-white">Sửa thông tin</Text>
+      </View>
       <ScrollView className="flex-1 bg-gray-100">
-        <View className="flex-row items-center justify-center bg-green-500 px-4 py-3 relative">
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            className="absolute left-4"
-          >
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text className="text-lg font-bold text-white">Sửa thông tin</Text>
-        </View>
-
         <View className="items-center my-5">
           <Image
             source={{ uri: profilePicture }}
