@@ -190,7 +190,7 @@ const Home = ({ navigation }) => {
             >
               <Image
                 source={{
-                  uri: 'https://cdn-icons-png.flaticon.com/512/843/843169.png',
+                  uri: 'https://firebasestorage.googleapis.com/v0/b/mealstogo-b034d.appspot.com/o/istockphoto-1344779917-612x612.jpg?alt=media&token=2cc79392-fd82-499e-84e4-bc4853c7380c',
                 }}
                 className="w-12 h-12"
               />

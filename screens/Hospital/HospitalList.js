@@ -40,11 +40,11 @@ const calculatedWidth = screenWidth - 50 - 12 - 60 - 32;
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => navigation.navigate('HospitalDetail', { hospital: item })} // Điều hướng đến trang chi tiết bệnh viện
+      onPress={() => navigation.navigate('HospitalDetail', { hospital: item.id })} // Điều hướng đến trang chi tiết bệnh viện
     >
       <View style={styles.itemContent}>
         <Image
-          source={{ uri: item.picture || 'https://via.placeholder.com/50' }} // Placeholder khi không có hình ảnh
+          source={{ uri: item.picture || 'https://firebasestorage.googleapis.com/v0/b/mealstogo-b034d.appspot.com/o/images%2F101123773.jpg?alt=media&token=284dc068-2734-4761-a372-100487048b2c' }} // Placeholder khi không có hình ảnh
           style={styles.itemImage}
         />
         <View style={{ width: calculatedWidth}} className="flex w-full">

@@ -92,13 +92,13 @@ const HospitalMap = ({ hospitalName }) => {
   }, [hospitalName]);
 
   if (error) {
-    return <Text>0.00 km</Text>;
+    return <Text className="text-red-500">0.00 km</Text>;
   }
 
   return (
     <View>
       {distance ? (
-        <Text>{distance} km</Text>
+        <Text className="text-red-500">{distance} km</Text>
       ) : (
         <Text>Đang tính toán quãng đường...</Text>
       )}

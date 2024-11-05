@@ -25,6 +25,7 @@ import PostList from '../screens/Post/PostList';
 import PostDetail from '../screens/Post/PostDetail';
 import Medical from '../screens/Schedule/Medical';
 import HospitalMap from '../screens/Hospital/HospitalMap';
+import HospitalDetail from '../screens/Hospital/HospitalDetail';
 const HomeScreen = () => {
   const { user } = useContext(AuthContext);
   const HomeStack = createStackNavigator();
@@ -62,6 +63,8 @@ const HomeScreen = () => {
             />
             <HomeStack.Screen name="medication" component={Medical} />
             <HomeStack.Screen name="hospitalMap" component={HospitalList} />
+            <HomeStack.Screen name="HospitalDetail" component={HospitalDetail} />
+
 
           </>
         ) : (
