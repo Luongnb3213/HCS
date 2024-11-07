@@ -1,26 +1,26 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
   FlatList,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { 
-  tabData, 
-  dtData, 
-  kqkData, 
-  cdhaData, 
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  tabData,
+  dtData,
+  kqkData,
+  cdhaData,
   examTitle,
   examDate,
-  examId, 
-  prescriptionTitle 
-} from "./data";
+  examId,
+  prescriptionTitle,
+} from './data';
 import AuthContext from '../../constants/AuthContext';
-
+import apiClient from '../../api/apiClient';
 
 const HealthReport = () => {
   const getUserToken = () => {
@@ -29,7 +29,7 @@ const HealthReport = () => {
   };
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const userId = 1; // Placeholder
+  const userId = getUserToken(); // Placeholder
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,13 +37,13 @@ const HealthReport = () => {
         const response = await apiClient.get(`/users/${userId}`);
         setUser(response.data);
       } catch (error) {
-        console.log("Error fetching user data:", error);
+        console.log('Error fetching user data:', error);
       }
     };
     fetchUser();
   }, []);
 
-  const [activeTab, setActiveTab] = useState("Kết quả khám");
+  const [activeTab, setActiveTab] = useState('Kết quả khám');
 
   const handleTabPress = (tab) => {
     setActiveTab(tab);
@@ -86,12 +86,14 @@ const HealthReport = () => {
               <TouchableOpacity
                 onPress={() => handleTabPress(item.title)}
                 className={`px-4 py-2 border-b-2 ${
-                  activeTab === item.title ? "border-green-600" : "border-transparent"
+                  activeTab === item.title
+                    ? 'border-green-600'
+                    : 'border-transparent'
                 }`}
               >
                 <Text
                   className={`text-lg ${
-                    activeTab === item.title ? "font-bold text-green-500" : ""
+                    activeTab === item.title ? 'font-bold text-green-500' : ''
                   }`}
                 >
                   {item.title}
@@ -104,7 +106,7 @@ const HealthReport = () => {
           />
 
           {/* Content based on activeTab */}
-          {activeTab === "Kết quả khám" && (
+          {activeTab === 'Kết quả khám' && (
             <View>
               <Text className="text-lg font-bold mx-4 mb-3 mt-6">
                 {examTitle}
@@ -113,14 +115,16 @@ const HealthReport = () => {
                 {kqkData.map((item, index) => (
                   <View className="flex-row mb-3" key={index}>
                     <Text className="text-lg w-2/3">{item.label}</Text>
-                    <Text className="text-lg w-1/3 text-right">{item.value}</Text>
+                    <Text className="text-lg w-1/3 text-right">
+                      {item.value}
+                    </Text>
                   </View>
                 ))}
               </View>
             </View>
           )}
 
-          {activeTab === "Kết quả CDHA và thăm dò chức năng" && (
+          {activeTab === 'Kết quả CDHA và thăm dò chức năng' && (
             <View className="bg-gray-100 px-4 py-2 rounded-lg mx-4 mt-6">
               {cdhaData.map((item, index) => (
                 <View key={index} className="mb-4">
@@ -132,7 +136,9 @@ const HealthReport = () => {
                     <Text className="text-base ml-4">{item.technique}</Text>
                     <Text className="text-base font-bold">MÔ TẢ:</Text>
                     {item.description.map((desc, i) => (
-                      <Text key={i} className="text-base ml-4">{desc}</Text>
+                      <Text key={i} className="text-base ml-4">
+                        {desc}
+                      </Text>
                     ))}
                     <Text className="text-base font-bold">KẾT LUẬN:</Text>
                     <Text className="text-base ml-4">{item.conclusion}</Text>
@@ -142,7 +148,7 @@ const HealthReport = () => {
             </View>
           )}
 
-          {activeTab === "Đơn thuốc" && (
+          {activeTab === 'Đơn thuốc' && (
             <View>
               <Text className="text-lg font-bold mx-4 mb-3 mt-6">
                 {prescriptionTitle}
@@ -161,7 +167,7 @@ const HealthReport = () => {
                   <View
                     key={item.id}
                     className={`flex-row ${
-                      index === dtData.length - 1 ? "" : "border-b"
+                      index === dtData.length - 1 ? '' : 'border-b'
                     } border-gray-300 py-2`}
                   >
                     <View className="w-1/6 justify-center items-center pr-7">
@@ -187,14 +193,32 @@ const HealthReport = () => {
 
         {/* Footer Navigation */}
         <View className="p-4">
-          <View className="flex-row justify-between">
-            <TouchableOpacity className="flex-row" onPress={() => {}}>
-              <Ionicons name="arrow-back" size={24} />
-              <Text className="text-base ml-1">Xem lần khám cũ hơn</Text>
+          <View className="flex-row items-center justify-between bg-white px-4 py-2 border-t border-gray-200">
+            {/* Nút "Xem lần khám cũ hơn" */}
+            <TouchableOpacity
+              className="flex-row items-center"
+            >
+              <Ionicons name="chevron-back-outline" size={20} color="#007AFF" />
+              <Text className="text-blue-500 text-sm ml-2">
+                Xem lần khám cũ hơn
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity className="flex-row" onPress={() => {}}>
-              <Text className="text-base mr-1">Xem lần khám mới hơn</Text>
-              <Ionicons name="arrow-forward" size={24} />
+
+            {/* Đường phân cách */}
+            <View className="w-px h-6 bg-gray-300" />
+
+            {/* Nút "Xem lần khám mới hơn" */}
+            <TouchableOpacity
+              className="flex-row items-center"
+            >
+              <Text className="text-blue-500 text-sm mr-2">
+                Xem lần khám mới hơn
+              </Text>
+              <Ionicons
+                name="chevron-forward-outline"
+                size={20}
+                color="#007AFF"
+              />
             </TouchableOpacity>
           </View>
         </View>

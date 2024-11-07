@@ -74,7 +74,7 @@ const SignUp = ({ navigation }) => {
         <Input
           text={formData.username}
           setText={(text) => setFormData({ ...formData, username: text })}
-          placeholder={'Nhập tên đăng nhập'}
+          placeholder={'Nhập tên đăng nhập / Số điện thoại'}
           Icon={MaterialCommunityIcons}
           iconName="account-outline"
           iconSize={28}

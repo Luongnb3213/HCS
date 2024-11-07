@@ -6,24 +6,27 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Modal,
+  Button,
 } from 'react-native';
 import apiClient from '../../api/apiClient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthContext from '../../constants/AuthContext';
 
 const HomeUser = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const getUserToken = () => {
     const { user } = useContext(AuthContext);
     return user?.id;
   };
   const [user, setUser] = useState(null);
-  const userId = 1;
+  const userId = getUserToken();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await apiClient.get(`/users/${userId}`);
-        console.log(user);
+
         setUser(response.data);
       } catch (error) {
         console.log('Error fetching user data:', error);
@@ -64,7 +67,10 @@ const HomeUser = ({ navigation }) => {
         <View className="bg-white p-4 mt-4 rounded-lg shadow mx-4">
           <Text className="text-lg font-bold mb-2">Tiện ích</Text>
           <View className="flex-row justify-between">
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className="w-1/4 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/2991/2991158.png',
@@ -73,7 +79,10 @@ const HomeUser = ({ navigation }) => {
               />
               <Text className="text-center text-sm">Gọi bác sĩ khẩn cấp</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className="w-1/4 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/2804/2804650.png',
@@ -82,7 +91,10 @@ const HomeUser = ({ navigation }) => {
               />
               <Text className="text-center text-sm">Hỏi riêng Bác sĩ</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className="w-1/4 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/3658/3658154.png',
@@ -91,7 +103,10 @@ const HomeUser = ({ navigation }) => {
               />
               <Text className="text-center text-sm">Theo dõi chỉ số</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className="w-1/4 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/2454/2454212.png',
@@ -106,7 +121,7 @@ const HomeUser = ({ navigation }) => {
         <View className="bg-white p-4 mt-4 rounded-lg shadow mx-4">
           <Text className="text-lg font-bold mb-2">Dịch vụ của bạn</Text>
           <View className="flex-row justify-between">
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity onPress={() => setModalVisible(true)} className="w-1/4 items-center">
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/7284/7284037.png',
@@ -115,7 +130,10 @@ const HomeUser = ({ navigation }) => {
               />
               <Text className="text-center text-sm">Lịch khám</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className="w-1/4 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png',
@@ -136,7 +154,10 @@ const HomeUser = ({ navigation }) => {
               />
               <Text className="text-center text-sm">Hồ sơ sức khỏe</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="w-1/4 items-center">
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className="w-1/4 items-center"
+            >
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/7757/7757793.png',
@@ -165,6 +186,36 @@ const HomeUser = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <View
+            style={{
+              width: 300,
+              padding: 20,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ marginBottom: 20 }}>
+              Hãy đợi bản cập nhật sau nhé!
+            </Text>
+            <Button title="Đóng" onPress={() => setModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

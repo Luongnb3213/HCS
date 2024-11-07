@@ -43,12 +43,7 @@ const TimeSlotComponent = ({ time, setTime }) => {
       id: 'afternoon',
       title: 'Buổi Chiều',
       timeSlots: generateTimeSlots(13, 30, 17, 30),
-    },
-    {
-      id: 'evening',
-      title: 'Buổi Tối',
-      timeSlots: generateTimeSlots(19, 0, 22, 30),
-    },
+    }
   ];
 
   const renderItem = ({ item }) => (

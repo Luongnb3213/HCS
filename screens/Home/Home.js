@@ -9,6 +9,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Device from 'expo-device';
@@ -26,6 +27,8 @@ Notifications.setNotificationHandler({
 
 const Home = ({ navigation }) => {
   const [text, setText] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+
   // const [expoPushToken, setExpoPushToken] = useState('');
   // const [channels, setChannels] = useState([]);
   // const [notification, setNotification] = useState(undefined);
@@ -100,7 +103,7 @@ const Home = ({ navigation }) => {
             Tính năng nổi bật
           </Text>
           <View className="flex-row justify-between flex-wrap">
-            <TouchableOpacity className="w-1/3 p-2 items-center">
+            <TouchableOpacity onPress={() => setModalVisible(true)} className="w-1/3 p-2 items-center">
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png',
@@ -125,7 +128,7 @@ const Home = ({ navigation }) => {
               <Text className="text-gray-700 text-sm mt-2">Đặt hẹn bác sĩ</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-1/3 p-2 items-center">
+            <TouchableOpacity onPress={() => setModalVisible(true)} className="w-1/3 p-2 items-center">
               <Image
                 source={{
                   uri: 'https://cdn-icons-png.flaticon.com/512/2804/2804650.png',
@@ -195,7 +198,7 @@ const Home = ({ navigation }) => {
                 className="w-12 h-12"
               />
               <Text className="text-gray-700 text-sm mt-2">
-              Map
+              Bệnh Viện
               </Text>
             </TouchableOpacity>
           </View>
@@ -216,6 +219,36 @@ const Home = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <View
+            style={{
+              width: 300,
+              padding: 20,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ marginBottom: 20 }}>
+              Hãy đợi bản cập nhật sau nhé!
+            </Text>
+            <Button title="Đóng" onPress={() => setModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

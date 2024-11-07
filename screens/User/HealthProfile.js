@@ -21,7 +21,7 @@ const HealthProfile = () => {
   };
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const userId = 1; // Placeholder
+  const userId = getUserToken(); // Placeholder
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -140,10 +140,11 @@ const HealthProfile = () => {
         </View>
 
         {/* Options */}
-        <View className="p-4">
+        <View className="p-4 flex flex-row gap-2">
           <TouchableOpacity className="bg-green-500 p-4 rounded-full mb-2 items-center">
             <Text className="text-white text-base">Xem kết quả khám</Text>
           </TouchableOpacity>
+
           <TouchableOpacity className="bg-green-500 p-4 rounded-full items-center">
             <Text className="text-white text-base">Tải lên hồ sơ sức khỏe</Text>
           </TouchableOpacity>
