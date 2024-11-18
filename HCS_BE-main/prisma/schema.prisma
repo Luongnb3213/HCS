@@ -1,0 +1,199 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  username       String    @unique
+  password       String
+  email          String    @unique
+  fullName       String
+  phone          String?
+  dateOfBirth    DateTime?
+  gender         Gender
+  role           Role
+  address        String?
+  profilePicture String?
+  isVerified     Boolean   @default(false)
+  emailToken     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  doctor        Doctor?
+  posts         Post[]
+  appointments  Appointment[]
+  comments      Comment[]
+  medications   Medication[]
+  healthRecords HealthRecord[]
+  notifications Notification[]
+}
+
+model Doctor {
+  id                String        @id @default(uuid())
+  userId            String        @unique
+  specialty         String
+  licenseNumber     String
+  experienceYears   Int
+  education         String
+  hospitalId        String
+  bio               String
+  rating            Float
+  numberAppointment Int           @default(0)
+  availableDays     Json
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  rent              Float?
+  user              User          @relation(fields: [userId], references: [id])
+  hospital          Hospital      @relation(fields: [hospitalId], references: [id])
+  Appointment       Appointment[]
+}
+
+model Hospital {
+  id        String       @id @default(uuid())
+  name      String?
+  address   String?
+  contact   String?
+  email     String?
+  website   String?
+  picture   String?
+  Note      String?  @db.LongText
+  type      HospitalType
+  services  Json
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  doctors     Doctor[]
+  Appointment Appointment[]
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  userId          String
+  doctorId        String?
+  hospitalId      String
+  appointmentDate DateTime
+  status          AppointmentStatus
+  reason          String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id])
+  doctor   Doctor?  @relation(fields: [doctorId], references: [id])
+  hospital Hospital @relation(fields: [hospitalId], references: [id])
+}
+
+model Post {
+  id            String       @id @default(uuid())
+  userId        String
+  title         String
+  content       String
+  category      PostCategory
+  tags          Json
+  views         Int          @default(0)
+  likes         Int          @default(0)
+  commentsCount Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id])
+  comments Comment[]
+}
+
+model HealthRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  recordType  String
+  description String
+  fileUrl     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Medication {
+  id           String           @id @default(uuid())
+  userId       String
+  medicineName String
+  dosage       String
+  frequency    String
+  reminderTime Json
+  picture      String?
+  status       MedicationStatus
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  content   String
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id               String           @id @default(uuid())
+  content          String
+  user             User             @relation(fields: [userId], references: [id])
+  userId           String
+  notificationType NotificationType
+  dataNotification String
+  sentAt           DateTime
+  createdAt        DateTime         @default(now())
+}
+
+enum NotificationType {
+  APPOINTMENT
+  MEDICATION
+  GENERAL
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Role {
+  USER
+  DOCTOR
+  ADMIN
+}
+
+enum HospitalType {
+  HOSPITAL
+  CLINIC
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  OVERDUE
+  COMPLETED
+}
+
+enum PostCategory {
+  HEALTH_TIPS
+  MEDICAL_NEWS
+  COMMUNITY
+}
+
+enum MedicationStatus {
+  PENDING
+  TAKEN
+  MISSED
+}
