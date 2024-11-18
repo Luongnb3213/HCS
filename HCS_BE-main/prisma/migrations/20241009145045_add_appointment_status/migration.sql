@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `appointment` MODIFY `status` ENUM('PENDING', 'CONFIRMED', 'CANCELLED', 'OVERDUE', 'COMPLETED') NOT NULL;
